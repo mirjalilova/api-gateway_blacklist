@@ -50,7 +50,7 @@ func (h *HandlerStruct) Approve(c *gin.Context) {
 // @Security 		BearerAuth
 // @Param           limit query int false "Limit"
 // @Param           offset query int false "Offset"
-// @Success 200 {object} auth.GetAllHRRes
+// @Success 200 {object} black_list.GetAllHRRes
 // @Failure 400 {object} string "Bad Request"
 // @Failure 500 {object} string "Internal Server Error"
 // @Router /admin/hr_list [get]

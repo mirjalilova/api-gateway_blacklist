@@ -15,8 +15,8 @@ import (
 // @Accept 				json
 // @Produce 			json
 // @Security            BearerAuth
-// @Param data 			body pb.BlackListBody true "Add employee"
-// @Success 201 		{object} string "Add employee to blacklist successfully"
+// @Param data 			body black_list.BlackListBody true "Add employee"
+// @Success 200 		{string} string "Add employee to blacklist successfully"
 // @Failure 400         {string} Error "Bad Request"
 // @Failure 404         {string} Error "Not Found"
 // @Failure 500         {string} Error "Internal Server Error"
@@ -53,7 +53,7 @@ func (h *HandlerStruct) AddEmployee(c *gin.Context) {
 // @Security            BearerAuth
 // @Param               limit query int false "Limit"
 // @Param               offset query int false "Offset"
-// @Success 200         {object} pb.GetAllBlackListRes
+// @Success 200         {object} black_list.GetAllBlackListRes
 // @Failure 400         {string} Error "Bad Request"
 // @Failure 404         {string} Error "Not Found"
 // @Failure 500         {string} Error "Internal Server Error"
@@ -109,7 +109,7 @@ func (h *HandlerStruct) GetAll(c *gin.Context) {
 // @Produce 			json
 // @Security            BearerAuth
 // @Param 			    employee_id path string true "Employee Id"
-// @Success 201 		{object} "Removed employee successfully from blacklist"
+// @Success 200 		{string} string "Removed employee successfully from blacklist"
 // @Failure 400         {string} Error "Bad Request"
 // @Failure 404         {string} Error "Not Found"
 // @Failure 500         {string} Error "Internal Server Error"

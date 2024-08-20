@@ -15,7 +15,7 @@ import (
 // @Accept 				json
 // @Produce 			json
 // @Security            BearerAuth
-// @Param data 			body pb.EmployeeCreateBody true "Employee"
+// @Param data 			body black_list.EmployeeCreateBody true "Employee"
 // @Success 201 		{object} string "Employee created successfully"
 // @Failure 400         {string} Error "Bad Request"
 // @Failure 404         {string} Error "Not Found"
@@ -52,7 +52,7 @@ func (h *HandlerStruct) CreateEmployee(c *gin.Context) {
 // @Produce 			json
 // @Security            BearerAuth
 // @Param 			    employee_id path string true "Employee ID"
-// @Success 200			{object} pb.Employee
+// @Success 200			{object} black_list.Employee
 // @Failure 400         {string} Error "Bad Request"
 // @Failure 404         {string} Error "Not Found"
 // @Failure 500         {string} Error "Internal Server Error"
@@ -84,7 +84,7 @@ func (h *HandlerStruct) GetEmployee(c *gin.Context) {
 // @Param               position query string false "Position"
 // @Param               limit query int false "Limit"
 // @Param               offset query int false "Offset"
-// @Success 200         {object} pb.ListEmployeeRes
+// @Success 200         {object} black_list.ListEmployeeRes
 // @Failure 400         {string} Error "Bad Request"
 // @Failure 404         {string} Error "Not Found"
 // @Failure 500         {string} Error "Internal Server Error"
@@ -143,7 +143,7 @@ func (h *HandlerStruct) GetAllEmployees(c *gin.Context) {
 // @Produce 			json
 // @Security            BearerAuth
 // @Param  				employee_id  path string true "Employee Id"
-// @Param  				employee  body pb.UpdateReqBody true "Employee"
+// @Param  				employee  body black_list.UpdateReqBody true "Employee"
 // @Success 200			{object} string "Employee updated successfully"
 // @Failure 400         {string} Error "Bad Request"
 // @Failure 404         {string} Error "Not Found"

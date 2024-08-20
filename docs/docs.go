@@ -9,20 +9,21 @@ const docTemplate = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
+        "termsOfService": "http://swagger.io/terms/",
         "contact": {},
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/admin/all": {
-            "get": {
+        "/admin/approve/{user_id}": {
+            "post": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "This API gets all admins",
+                "description": "Create a new hr",
                 "consumes": [
                     "application/json"
                 ],
@@ -30,9 +31,95 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "ADMIN"
+                    "Admin"
                 ],
-                "summary": "GET ALL ADMINs",
+                "summary": "Create a new hr",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "USER ID",
+                        "name": "user_id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "HR created successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "error\": \"error message",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/delete_hr/{hr_id}": {
+            "delete": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Delete HR",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Delete HR",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "HR ID",
+                        "name": "hr_id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "HR deleted successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "error\": \"error message",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/hr_list": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get hr list",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Get hr list",
                 "parameters": [
                     {
                         "type": "integer",
@@ -60,12 +147,6 @@ const docTemplate = `{
                             "type": "string"
                         }
                     },
-                    "404": {
-                        "description": "Not Found",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
                     "500": {
                         "description": "Internal Server Error",
                         "schema": {
@@ -75,14 +156,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/admin/approve": {
+        "/blacklist/add": {
             "post": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "This API approves an admin by their ID",
+                "description": "Add employee to black list",
                 "consumes": [
                     "application/json"
                 ],
@@ -90,78 +171,23 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "ADMIN"
+                    "Black List"
                 ],
-                "summary": "Approve an Admin",
+                "summary": "Add employee to black list",
                 "parameters": [
                     {
-                        "description": "Admin Approval Data",
-                        "name": "body",
+                        "description": "Add employee",
+                        "name": "data",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/black_list.ApproveByAdmin"
+                            "$ref": "#/definitions/black_list.BlackListBody"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "admin\": \"approved successfully",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "error\": \"error message",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "404": {
-                        "description": "error\": \"not found",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "500": {
-                        "description": "error\": \"internal server error",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/admin/{id}": {
-            "delete": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "This api deletes admin by id",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "ADMIN"
-                ],
-                "summary": "DELETE ADMIN",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "ADMIN ID",
-                        "name": "id",
-                        "in": "path",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "admin deleted successfully",
+                        "description": "Add employee to blacklist successfully",
                         "schema": {
                             "type": "string"
                         }
@@ -177,6 +203,12 @@ const docTemplate = `{
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
@@ -188,7 +220,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "This API gets all blacklists",
+                "description": "Get all employee from blacklist",
                 "consumes": [
                     "application/json"
                 ],
@@ -196,16 +228,10 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "BLACKLIST"
+                    "Black List"
                 ],
-                "summary": "GET ALL BLACKLISTS",
+                "summary": "Get all employee from blacklist",
                 "parameters": [
-                    {
-                        "type": "string",
-                        "description": "blacklist",
-                        "name": "addedBy",
-                        "in": "query"
-                    },
                     {
                         "type": "integer",
                         "description": "Limit",
@@ -247,59 +273,14 @@ const docTemplate = `{
                 }
             }
         },
-        "/blacklist/employee": {
-            "post": {
-                "security": [
-                    {
-                        "BearerAuth": []
-                    }
-                ],
-                "description": "This api create blacklist",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "BLACKLIST"
-                ],
-                "summary": "CREATE BLACKLIST",
-                "parameters": [
-                    {
-                        "description": "BlackListCreate",
-                        "name": "data",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/black_list.BlackListCreate"
-                        }
-                    }
-                ],
-                "responses": {
-                    "201": {
-                        "description": "Blacklist created successfully",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                }
-            }
-        },
-        "/blacklist/{id}": {
+        "/blacklist/remove/{employee_id}": {
             "delete": {
                 "security": [
                     {
                         "BearerAuth": []
                     }
                 ],
-                "description": "This api logs blacklist in id",
+                "description": "Remove employee from blacklist",
                 "consumes": [
                     "application/json"
                 ],
@@ -307,27 +288,39 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "BLACKLIST"
+                    "Black List"
                 ],
-                "summary": "DELETE BLACKLIST",
+                "summary": "Remove employee from blacklist",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "BLACKLIST ID",
-                        "name": "id",
+                        "description": "Employee Id",
+                        "name": "employee_id",
                         "in": "path",
                         "required": true
                     }
                 ],
                 "responses": {
-                    "201": {
-                        "description": "Created",
+                    "200": {
+                        "description": "Removed employee successfully from blacklist",
                         "schema": {
-                            "$ref": "#/definitions/black_list.Void"
+                            "type": "string"
                         }
                     },
                     "400": {
                         "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "type": "string"
                         }
@@ -350,7 +343,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "EMPLOYEE"
+                    "Employee"
                 ],
                 "summary": "GET ALL EMPLOYEES",
                 "parameters": [
@@ -416,7 +409,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "EMPLOYEE"
+                    "Employee"
                 ],
                 "summary": "CREATE EMPLOYEE",
                 "parameters": [
@@ -442,11 +435,23 @@ const docTemplate = `{
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
         },
-        "/employee/update": {
+        "/employee/update/{employee_id}": {
             "put": {
                 "security": [
                     {
@@ -461,17 +466,24 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "EMPLOYEE"
+                    "Employee"
                 ],
                 "summary": "UPDATES EMPLOYEE",
                 "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Employee Id",
+                        "name": "employee_id",
+                        "in": "path",
+                        "required": true
+                    },
                     {
                         "description": "Employee",
                         "name": "employee",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/black_list.UpdateReq"
+                            "$ref": "#/definitions/black_list.UpdateReqBody"
                         }
                     }
                 ],
@@ -493,11 +505,17 @@ const docTemplate = `{
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
         },
-        "/employee/{id}": {
+        "/employee/{employee_id}": {
             "get": {
                 "security": [
                     {
@@ -512,14 +530,14 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "EMPLOYEE"
+                    "Employee"
                 ],
                 "summary": "GET EMPLOYEE",
                 "parameters": [
                     {
                         "type": "string",
                         "description": "Employee ID",
-                        "name": "id",
+                        "name": "employee_id",
                         "in": "path",
                         "required": true
                     }
@@ -542,6 +560,12 @@ const docTemplate = `{
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             },
@@ -559,14 +583,14 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "EMPLOYEE"
+                    "Employee"
                 ],
                 "summary": "DELETES EMPLOYEE",
                 "parameters": [
                     {
                         "type": "string",
                         "description": "Employee",
-                        "name": "id",
+                        "name": "employee_id",
                         "in": "path",
                         "required": true
                     }
@@ -589,30 +613,22 @@ const docTemplate = `{
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
         }
     },
     "definitions": {
-        "black_list.ApproveByAdmin": {
+        "black_list.BlackListBody": {
             "type": "object",
             "properties": {
-                "user_id": {
-                    "type": "string"
-                }
-            }
-        },
-        "black_list.BlackListCreate": {
-            "type": "object",
-            "properties": {
-                "action": {
-                    "type": "string"
-                },
-                "added_by": {
-                    "type": "string"
-                },
-                "employe_id": {
+                "employee_id": {
                     "type": "string"
                 },
                 "reason": {
@@ -682,6 +698,9 @@ const docTemplate = `{
                     "items": {
                         "$ref": "#/definitions/black_list.BlackListRes"
                     }
+                },
+                "count": {
+                    "type": "integer"
                 }
             }
         },
@@ -733,26 +752,21 @@ const docTemplate = `{
                 }
             }
         },
-        "black_list.UpdateReq": {
+        "black_list.UpdateReqBody": {
             "type": "object",
             "properties": {
                 "hr_id": {
-                    "type": "string"
-                },
-                "id": {
                     "type": "string"
                 },
                 "position": {
                     "type": "string"
                 }
             }
-        },
-        "black_list.Void": {
-            "type": "object"
         }
     },
     "securityDefinitions": {
-        "BearerAuth": {
+        "ApiKeyAuth": {
+            "description": "Description for what is this security definition being used",
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"
@@ -762,14 +776,16 @@ const docTemplate = `{
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = &swag.Spec{
-	Version:          "",
+	Version:          "1.0",
 	Host:             "",
-	BasePath:         "/",
+	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "Black List System Managment Swagger API",
-	Description:      "",
+	Title:            "Black List",
+	Description:      "This is a sample server celler server.",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
+	LeftDelim:        "{{",
+	RightDelim:       "}}",
 }
 
 func init() {
