@@ -43,6 +43,7 @@ func GetRole(r *http.Request) (string, error) {
 	)
 
 	jwtToken := r.Header.Get("Authorization")
+	slog.Info("Extracting claims from tokennnnnnnnnnnnnnnnnnnnnnnn: %s\n", jwtToken)
 	if jwtToken == "" {
 		return "unauthorized", nil
 	} else if strings.Contains(jwtToken, "Basic") {
