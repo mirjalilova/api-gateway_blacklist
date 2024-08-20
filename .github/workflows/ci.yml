@@ -30,4 +30,3 @@ jobs:
           git pull origin main
           sudo docker compose up --build
           sudo docker compose up
-          
