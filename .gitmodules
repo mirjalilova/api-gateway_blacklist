@@ -1,0 +1,3 @@
+[submodule "black_list_submodule"]
+	path = black_list_submodule
+	url = git@github.com:mirjalilova/black_list_submodule.git

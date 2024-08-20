@@ -1,0 +1,16 @@
+version: '3.9'
+
+services:
+  # API Gateway
+  gateway:
+    container_name: gateway
+    build: .
+    ports:
+      - "3333:3333"
+    networks:
+      - ntwrk
+# Docker Networks
+networks:
+  ntwrk:
+      name: ntwrk
+      external: true
