@@ -15,20 +15,23 @@ import (
 )
 
 // @title           Black List
-// @version         1.0
-// @description     This is a sample server celler server.
-// @termsOfService  http://swagger.io/terms/
-// @securityDefinitions.apikey  ApiKeyAuth
-// @in                          header
-// @name                        Authorization
-// @BasePath  /router
-// @description					Description for what is this security definition being used
+// @version 1.0
+// @description API for Authentication Service
+// @securityDefinitions.apikey BearerAuth
+// @in header
+// @name Authorization
 func NewGin(h *handler.HandlerStruct) *gin.Engine {
 	router := gin.Default()
 
-	enforcer, err := casbin.NewEnforcer("gateway/casbin/model.conf", "gateway/casbin/policy.csv")
+	enforcer, err := casbin.NewEnforcer("./api/casbin/model.conf", "./api/casbin/policy.csv")
 	if err != nil {
 		slog.Error("Error while initializing casbin enforcer: %v", err)
+	}
+
+	if enforcer == nil {
+		slog.Error("Enforcer is nil after initialization!")
+	} else {
+		slog.Info("Enforcer initialized successfully.")
 	}
 
 	corsConfig := cors.Config{
