@@ -9,15 +9,15 @@ RUN go mod download
 
 COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o gateway .
+RUN CGO_ENABLED=0 GOOS=linux go build -o gateway ./cmd/
 
 FROM alpine:latest
 WORKDIR /app
 COPY .env .
 
 COPY --from=builder /app/gateway .
-COPY --from=builder /app//api/model.conf ./api/
-COPY --from=builder /app/api/policy.csv ./api/
+COPY --from=builder /app//api/casbin/model.conf ./api/
+COPY --from=builder /app/api/casbin/policy.csv ./api/
 
 EXPOSE 3333
 
