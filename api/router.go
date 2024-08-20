@@ -42,6 +42,9 @@ func NewGin(h *handler.HandlerStruct) *gin.Engine {
 	// url := ginSwagger.URL("swagger/doc.json")
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
+	allowed, err := enforcer.Enforce("admin", "/admin/hr_list", "GET")
+	slog.Info("Permission allowed: %v, Error: %v", allowed, err)
+
 	admin := router.Group("/admin").Use(middlerware.NewAuth(enforcer))
 	{
 		admin.POST("/approve/:user_id", h.Approve)

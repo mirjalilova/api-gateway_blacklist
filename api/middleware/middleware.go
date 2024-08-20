@@ -2,7 +2,6 @@ package middlerware
 
 import (
 	"errors"
-	"log"
 	"net/http"
 	"strings"
 
@@ -10,6 +9,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt"
 	token "github.com/mirjalilova/api-gateway_blacklist/api/token"
+	"golang.org/x/exp/slog"
 )
 
 const (
@@ -49,27 +49,33 @@ func GetRole(r *http.Request) (string, error) {
 		return "unauthorized", nil
 	}
 	claims, err = token.ExtractClaims(jwtToken, key)
-	log.Printf("Claims----: %+v\n", claims)
 
 	if err != nil {
-		log.Println("Error while extracting claims: ", err)
+		slog.Error("Error while extracting claims: ", err)
 		return "unauthorized", err
 	}
 
-	return claims["role"].(string), nil
+	role, ok := claims["role"].(string)
+	if !ok {
+		return "unauthorized", errors.New("role claim not found")
+	}
+	
+	return role, nil
 }
 
 func CheckPermission(path string, r *http.Request, enforcer *casbin.Enforcer) (bool, error) {
 	role, err := GetRole(r)
 	if err != nil {
-		log.Println("Error while getting role from token: ", err)
+		slog.Error("Error while getting role from token: ", err)
 		return false, err
 	}
 	method := r.Method
 
+	slog.Info("Checking permission for role: %s, path: %s, method: %s\n", role, path, method)
+
 	allowed, err := enforcer.Enforce(role, path, method)
 	if err != nil {
-		log.Println("Error while comparing role from csv list: ", err)
+		slog.Error("Error while comparing role from csv list: ", err)
 		return false, err
 	}
 
@@ -83,15 +89,9 @@ func GetUserId(r *http.Request) (string, error) {
 		return "unauthorized", nil
 	}
 
-	// if !strings.HasPrefix(jwtToken, "Bearer ") {
-	// 	return "unauthorized", errors.New("invalid authorization header format")
-	// }
-
-	// tokenString := strings.TrimPrefix(jwtToken, "Bearer ")
-
 	claims, err := token.ExtractClaims(jwtToken, key)
 	if err != nil {
-		log.Println("Error while extracting claims: ", err)
+		slog.Error("Error while extracting claims: ", err)
 		return "unauthorized", err
 	}
 
