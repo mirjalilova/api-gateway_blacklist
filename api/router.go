@@ -23,7 +23,7 @@ import (
 func NewGin(h *handler.HandlerStruct) *gin.Engine {
 	router := gin.Default()
 
-	enforcer, err := casbin.NewEnforcer("/home/ubuntu/project/blacklist/api-gateway_blacklist/api/casbin/model.conf", "/home/ubuntu/project/blacklist/api-gateway_blacklist/api/casbin/policy.csv")
+	enforcer, err := casbin.NewEnforcer("gateway/api/casbin/model.conf", "gateway/api/casbin/policy.csv")
 	if err != nil {
 		slog.Error("Error while initializing casbin enforcer: %v", err)
 	}
