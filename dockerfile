@@ -16,8 +16,8 @@ WORKDIR /app
 COPY .env .
 
 COPY --from=builder /app/gateway .
-COPY --from=builder /app/api/casbin/model.conf ./api/
-COPY --from=builder /app/api/casbin/policy.csv ./api/
+COPY --from=builder /app/api/casbin/model.conf ./api/casbin/
+COPY --from=builder /app/api/casbin/policy.csv ./api/casbin/
 
 EXPOSE 3333
 
