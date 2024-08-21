@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+option go_package = "internal/genproto/black_list";
+
+package black_list;
+
+import "common.proto";
+
+service AdminService {
+    rpc Approve (CreateHR) returns (Void) {}
+    rpc ListHR (Filter) returns (GetAllHRRes) {}
+    rpc Delete (GetById) returns (Void) {}
+}
+
+message CreateHR {
+    string user_id = 1;
+    string approved_by = 2;
+}
+
+message GetAllHRRes {
+    repeated Hr hr = 1;
+    int32 count = 2;
+}
+
+message Hr {
+    string id = 1;
+    string Email = 2;
+    string FullName = 3;
+    string DateOfBirth = 4;
+    string created_at = 5;
+}
+

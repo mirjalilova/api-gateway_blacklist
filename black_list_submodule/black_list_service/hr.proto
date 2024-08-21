@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+option go_package = "internal/genproto/black_list";
+
+package black_list;
+
+import "common.proto";
+
+service HRService {
+  rpc Create (EmployeeCreate) returns (Void) {}
+  rpc Get (GetById) returns (Employee) {}
+  rpc GetAll (ListEmployeeReq) returns (ListEmployeeRes) {}
+  rpc Update (UpdateReq) returns (Void) {}
+  rpc Delete (GetById) returns (Void) {}
+}
+
+message Employee {
+  string id = 1;
+  string Email = 2;
+  string FullName = 3;
+  string DateOfBirth = 4;
+  string position = 5;
+  string hr_id = 6;
+}
+
+message EmployeeCreateBody {
+  string user_id = 1;
+  string position  = 2;
+}
+
+message EmployeeCreate {
+  string user_id = 1;
+  string position  = 2;
+  string hr_id = 4;
+}
+
+message UpdateReqBody {
+  string position  = 1;
+  string hr_id   = 2;
+}
+
+message UpdateReq {
+  string id = 1;
+  string position  = 2;
+  string hr_id   = 3;
+}
+
+message ListEmployeeReq {
+  string position = 1;
+  Filter filter = 2;
+}
+
+message ListEmployeeRes {
+  repeated Employee employees = 1;
+  int32 count = 2;
+}

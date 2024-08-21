@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+option go_package = "internal/genproto/black_list";
+
+package black_list;
+
+message Void {}
+
+message GetById {
+  string id = 1;
+}
+
+message Filter {
+  int32 limit = 1;
+  int32 offset = 2;
+}
