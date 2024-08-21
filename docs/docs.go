@@ -418,7 +418,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/black_list.EmployeeCreateBody"
+                            "$ref": "#/definitions/black_list.EmployeeCreate"
                         }
                     }
                 ],
@@ -678,9 +678,12 @@ const docTemplate = `{
                 }
             }
         },
-        "black_list.EmployeeCreateBody": {
+        "black_list.EmployeeCreate": {
             "type": "object",
             "properties": {
+                "hr_id": {
+                    "type": "string"
+                },
                 "position": {
                     "type": "string"
                 },
@@ -778,8 +781,8 @@ var SwaggerInfo = &swag.Spec{
 	Host:             "",
 	BasePath:         "",
 	Schemes:          []string{},
-	Title:            "Black List",
-	Description:      "API for Authentication Service",
+	Title:            "Black List API Gateway",
+	Description:      "API for Black List Service",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

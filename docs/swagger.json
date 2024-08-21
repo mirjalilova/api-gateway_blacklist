@@ -1,8 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "API for Authentication Service",
-        "title": "Black List",
+        "description": "API for Black List Service",
+        "title": "Black List API Gateway",
         "contact": {},
         "version": "1.0"
     },
@@ -410,7 +410,7 @@
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/black_list.EmployeeCreateBody"
+                            "$ref": "#/definitions/black_list.EmployeeCreate"
                         }
                     }
                 ],
@@ -670,9 +670,12 @@
                 }
             }
         },
-        "black_list.EmployeeCreateBody": {
+        "black_list.EmployeeCreate": {
             "type": "object",
             "properties": {
+                "hr_id": {
+                    "type": "string"
+                },
                 "position": {
                     "type": "string"
                 },

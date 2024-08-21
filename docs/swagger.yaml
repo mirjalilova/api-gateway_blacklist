@@ -34,8 +34,10 @@ definitions:
       position:
         type: string
     type: object
-  black_list.EmployeeCreateBody:
+  black_list.EmployeeCreate:
     properties:
+      hr_id:
+        type: string
       position:
         type: string
       user_id:
@@ -90,8 +92,8 @@ definitions:
     type: object
 info:
   contact: {}
-  description: API for Authentication Service
-  title: Black List
+  description: API for Black List Service
+  title: Black List API Gateway
   version: "1.0"
 paths:
   /admin/approve/{user_id}:
@@ -413,7 +415,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/black_list.EmployeeCreateBody'
+          $ref: '#/definitions/black_list.EmployeeCreate'
       produces:
       - application/json
       responses:
