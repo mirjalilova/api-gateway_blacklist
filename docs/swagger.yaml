@@ -1,0 +1,489 @@
+definitions:
+  black_list.BlackListBody:
+    properties:
+      employee_id:
+        type: string
+      reason:
+        type: string
+    type: object
+  black_list.BlackListRes:
+    properties:
+      DateOfBirth:
+        type: string
+      FullName:
+        type: string
+      blacklisted_at:
+        type: string
+      position:
+        type: string
+      reason:
+        type: string
+    type: object
+  black_list.Employee:
+    properties:
+      DateOfBirth:
+        type: string
+      Email:
+        type: string
+      FullName:
+        type: string
+      hr_id:
+        type: string
+      id:
+        type: string
+      position:
+        type: string
+    type: object
+  black_list.EmployeeCreateBody:
+    properties:
+      position:
+        type: string
+      user_id:
+        type: string
+    type: object
+  black_list.GetAllBlackListRes:
+    properties:
+      black_lists:
+        items:
+          $ref: '#/definitions/black_list.BlackListRes'
+        type: array
+      count:
+        type: integer
+    type: object
+  black_list.GetAllHRRes:
+    properties:
+      count:
+        type: integer
+      hr:
+        items:
+          $ref: '#/definitions/black_list.Hr'
+        type: array
+    type: object
+  black_list.Hr:
+    properties:
+      DateOfBirth:
+        type: string
+      Email:
+        type: string
+      FullName:
+        type: string
+      created_at:
+        type: string
+      id:
+        type: string
+    type: object
+  black_list.ListEmployeeRes:
+    properties:
+      count:
+        type: integer
+      employees:
+        items:
+          $ref: '#/definitions/black_list.Employee'
+        type: array
+    type: object
+  black_list.UpdateReqBody:
+    properties:
+      hr_id:
+        type: string
+      position:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: This is a sample server celler server.
+  termsOfService: http://swagger.io/terms/
+  title: Black List
+  version: "1.0"
+paths:
+  /admin/approve/{user_id}:
+    post:
+      consumes:
+      - application/json
+      description: Create a new hr
+      parameters:
+      - description: USER ID
+        in: path
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: HR created successfully
+          schema:
+            type: string
+        "400":
+          description: 'error": "error message'
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Create a new hr
+      tags:
+      - Admin
+  /admin/delete_hr/{hr_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete HR
+      parameters:
+      - description: HR ID
+        in: query
+        name: hr_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: HR deleted successfully
+          schema:
+            type: string
+        "400":
+          description: 'error": "error message'
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Delete HR
+      tags:
+      - Admin
+  /admin/hr_list:
+    get:
+      consumes:
+      - application/json
+      description: Get hr list
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/black_list.GetAllHRRes'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get hr list
+      tags:
+      - Admin
+  /blacklist/add:
+    post:
+      consumes:
+      - application/json
+      description: Add employee to black list
+      parameters:
+      - description: Add employee
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/black_list.BlackListBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Add employee to blacklist successfully
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Add employee to black list
+      tags:
+      - Black List
+  /blacklist/all:
+    get:
+      consumes:
+      - application/json
+      description: Get all employee from blacklist
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/black_list.GetAllBlackListRes'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get all employee from blacklist
+      tags:
+      - Black List
+  /blacklist/remove/{employee_id}:
+    delete:
+      consumes:
+      - application/json
+      description: Remove employee from blacklist
+      parameters:
+      - description: Employee Id
+        in: path
+        name: employee_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Removed employee successfully from blacklist
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Remove employee from blacklist
+      tags:
+      - Black List
+  /employee/{employee_id}:
+    delete:
+      consumes:
+      - application/json
+      description: This api deletes employee
+      parameters:
+      - description: Employee
+        in: path
+        name: employee_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Employee deleted successfully
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: DELETES EMPLOYEE
+      tags:
+      - Employee
+    get:
+      consumes:
+      - application/json
+      description: This api get employee by id
+      parameters:
+      - description: Employee ID
+        in: path
+        name: employee_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/black_list.Employee'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: GET EMPLOYEE
+      tags:
+      - Employee
+  /employee/all:
+    get:
+      consumes:
+      - application/json
+      description: This API gets all employees
+      parameters:
+      - description: Position
+        in: query
+        name: position
+        type: string
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/black_list.ListEmployeeRes'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: GET ALL EMPLOYEES
+      tags:
+      - Employee
+  /employee/create:
+    post:
+      consumes:
+      - application/json
+      description: This api create employee
+      parameters:
+      - description: Employee
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/black_list.EmployeeCreateBody'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Employee created successfully
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: CREATE EMPLOYEE
+      tags:
+      - Employee
+  /employee/update/{employee_id}:
+    put:
+      consumes:
+      - application/json
+      description: This api updatedes employee
+      parameters:
+      - description: Employee Id
+        in: path
+        name: employee_id
+        required: true
+        type: string
+      - description: Employee
+        in: body
+        name: employee
+        required: true
+        schema:
+          $ref: '#/definitions/black_list.UpdateReqBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Employee updated successfully
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: UPDATES EMPLOYEE
+      tags:
+      - Employee
+securityDefinitions:
+  ApiKeyAuth:
+    description: Description for what is this security definition being used
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

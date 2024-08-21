@@ -1,0 +1,15 @@
+p, unauthorized, /,                      GET
+
+p, admin, /admin/approve/:user_id,       POST
+p, admin, /admin/hr_list,                GET
+p, admin, /admin/delete_hr/:hr_id,       DELETE
+
+p, hr, /employee/create,                 POST
+p, hr, /employee/:employee_id,           GET
+p, hr, /employee/all,                    GET
+p, hr, /employee/update/:employee_id,    PUT
+p, hr, /employee/:employee_id,           DELETE
+
+p, user, /blacklist/add,                 POST
+p, user, /blacklist/all,                 GET
+p, user, /blacklist/:employee_id,        DELETE
