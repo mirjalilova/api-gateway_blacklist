@@ -11,6 +11,6 @@ type HandlerStruct struct {
 
 func NewHandlerStruct(cnf *config.Config) *HandlerStruct {
 	return &HandlerStruct{
-		Clients: *clients.NewClients(cnf),
+		Clients: *clients.NewClients(*cnf),
 	}
 }

@@ -43,7 +43,6 @@ func GetRole(r *http.Request) (string, error) {
 	)
 
 	jwtToken := r.Header.Get("Authorization")
-	slog.Info("Extracting claims from tokennnnnnnnnnnnnnnnnnnnnnnn: %s\n", jwtToken)
 	if jwtToken == "" {
 		return "unauthorized", nil
 	} else if strings.Contains(jwtToken, "Basic") {
@@ -71,8 +70,6 @@ func CheckPermission(path string, r *http.Request, enforcer *casbin.Enforcer) (b
 		return false, err
 	}
 	method := r.Method
-
-	slog.Info("Checking permission for role: %s, path: %s, method: %s\n", role, path, method)
 
 	allowed, err := enforcer.Enforce(role, path, method)
 	if err != nil {
