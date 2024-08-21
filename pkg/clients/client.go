@@ -3,6 +3,7 @@ package clients
 import (
 	"log/slog"
 
+	"github.com/mirjalilova/api-gateway_blacklist/internal/config"
 	pb "github.com/mirjalilova/api-gateway_blacklist/internal/genproto/black_list"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -16,8 +17,8 @@ type Clients struct {
 
 }
 
-func NewClients() *Clients {
-	conn, err := grpc.NewClient("black_list:6060", grpc.WithTransportCredentials(insecure.NewCredentials()))
+func NewClients(cnf config.Config) *Clients {
+	conn, err := grpc.NewClient("black_list" + cnf.BLACKLIST_PORT, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		slog.Error("error:", err)
 	}

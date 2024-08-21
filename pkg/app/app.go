@@ -25,7 +25,7 @@ func Run(cfg *config.Config) {
 	// 	DB:       0,
 	// })
 
-	h := handler.NewHandlerStruct()
+	h := handler.NewHandlerStruct(cfg)
 
 	router := api.NewGin(h)
 	if err := router.Run(cfg.API_GATEWAY); err != nil {
