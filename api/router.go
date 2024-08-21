@@ -14,9 +14,9 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-// @title           Black List
+// @title           Black List API Gateway
 // @version 1.0
-// @description API for Authentication Service
+// @description API for Black List Service
 // @securityDefinitions.apikey BearerAuth
 // @in header
 // @name Authorization

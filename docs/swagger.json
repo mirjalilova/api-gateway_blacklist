@@ -1,9 +1,8 @@
 {
     "swagger": "2.0",
     "info": {
-        "description": "This is a sample server celler server.",
+        "description": "API for Authentication Service",
         "title": "Black List",
-        "termsOfService": "http://swagger.io/terms/",
         "contact": {},
         "version": "1.0"
     },
@@ -757,8 +756,7 @@
         }
     },
     "securityDefinitions": {
-        "ApiKeyAuth": {
-            "description": "Description for what is this security definition being used",
+        "BearerAuth": {
             "type": "apiKey",
             "name": "Authorization",
             "in": "header"
