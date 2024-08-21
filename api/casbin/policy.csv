@@ -14,6 +14,7 @@ p, hr, /blacklist/add,                   POST
 p, hr, /blacklist/all,                   GET
 p, hr, /blacklist/:employee_id,          DELETE
 
+p, admin, /employee/create,              POST
 p, admin, /employee/:employee_id,        GET
 p, admin, /employee/all,                 GET
 p, admin, /employee/update/:employee_id, PUT
