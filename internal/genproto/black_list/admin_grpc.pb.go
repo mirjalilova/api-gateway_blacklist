@@ -19,9 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	AdminService_Approve_FullMethodName = "/black_list.AdminService/Approve"
-	AdminService_ListHR_FullMethodName  = "/black_list.AdminService/ListHR"
-	AdminService_Delete_FullMethodName  = "/black_list.AdminService/Delete"
+	AdminService_Approve_FullMethodName     = "/black_list.AdminService/Approve"
+	AdminService_ListHR_FullMethodName      = "/black_list.AdminService/ListHR"
+	AdminService_Delete_FullMethodName      = "/black_list.AdminService/Delete"
+	AdminService_GetAllUsers_FullMethodName = "/black_list.AdminService/GetAllUsers"
 )
 
 // AdminServiceClient is the client API for AdminService service.
@@ -31,6 +32,7 @@ type AdminServiceClient interface {
 	Approve(ctx context.Context, in *CreateHR, opts ...grpc.CallOption) (*Void, error)
 	ListHR(ctx context.Context, in *Filter, opts ...grpc.CallOption) (*GetAllHRRes, error)
 	Delete(ctx context.Context, in *GetById, opts ...grpc.CallOption) (*Void, error)
+	GetAllUsers(ctx context.Context, in *ListUserReq, opts ...grpc.CallOption) (*ListUserRes, error)
 }
 
 type adminServiceClient struct {
@@ -71,6 +73,16 @@ func (c *adminServiceClient) Delete(ctx context.Context, in *GetById, opts ...gr
 	return out, nil
 }
 
+func (c *adminServiceClient) GetAllUsers(ctx context.Context, in *ListUserReq, opts ...grpc.CallOption) (*ListUserRes, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListUserRes)
+	err := c.cc.Invoke(ctx, AdminService_GetAllUsers_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AdminServiceServer is the server API for AdminService service.
 // All implementations must embed UnimplementedAdminServiceServer
 // for forward compatibility
@@ -78,6 +90,7 @@ type AdminServiceServer interface {
 	Approve(context.Context, *CreateHR) (*Void, error)
 	ListHR(context.Context, *Filter) (*GetAllHRRes, error)
 	Delete(context.Context, *GetById) (*Void, error)
+	GetAllUsers(context.Context, *ListUserReq) (*ListUserRes, error)
 	mustEmbedUnimplementedAdminServiceServer()
 }
 
@@ -93,6 +106,9 @@ func (UnimplementedAdminServiceServer) ListHR(context.Context, *Filter) (*GetAll
 }
 func (UnimplementedAdminServiceServer) Delete(context.Context, *GetById) (*Void, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Delete not implemented")
+}
+func (UnimplementedAdminServiceServer) GetAllUsers(context.Context, *ListUserReq) (*ListUserRes, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAllUsers not implemented")
 }
 func (UnimplementedAdminServiceServer) mustEmbedUnimplementedAdminServiceServer() {}
 
@@ -161,6 +177,24 @@ func _AdminService_Delete_Handler(srv interface{}, ctx context.Context, dec func
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AdminService_GetAllUsers_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListUserReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServiceServer).GetAllUsers(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminService_GetAllUsers_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServiceServer).GetAllUsers(ctx, req.(*ListUserReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AdminService_ServiceDesc is the grpc.ServiceDesc for AdminService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -179,6 +213,10 @@ var AdminService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Delete",
 			Handler:    _AdminService_Delete_Handler,
+		},
+		{
+			MethodName: "GetAllUsers",
+			Handler:    _AdminService_GetAllUsers_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
