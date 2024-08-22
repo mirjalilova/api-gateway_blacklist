@@ -15,21 +15,26 @@ import (
 // @Accept 				json
 // @Produce 			json
 // @Security            BearerAuth
-// @Param data 			body black_list.EmployeeCreate true "Employee"
+// @Param data 			body black_list.EmployeeCreateBody true "Employee"
 // @Success 201 		{object} string "Employee created successfully"
 // @Failure 400         {string} Error "Bad Request"
 // @Failure 404         {string} Error "Not Found"
 // @Failure 500         {string} Error "Internal Server Error"
 // @Router 				/employee/create [POST]
 func (h *HandlerStruct) CreateEmployee(c *gin.Context) {
-	req := &pb.EmployeeCreate{}
-	
-	if err := c.ShouldBindJSON(&req); err != nil {
+	body := &pb.EmployeeCreateBody{}
+
+	if err := c.ShouldBindJSON(&body); err != nil {
 		slog.Error("Failed to bind JSON: ", err)
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
+	req := &pb.EmployeeCreate{
+		UserId:   body.UserId,
+		Position: body.Position,
+		HrId:     getuserId(c),
+	}
 	_, err := h.Clients.HrClient.Create(context.Background(), req)
 	if err != nil {
 		slog.Error("Error while create employee: ", err)
@@ -186,7 +191,7 @@ func (h *HandlerStruct) UpdateEmployee(c *gin.Context) {
 // @Router 				/employee/{employee_id} [DELETE]
 func (h *HandlerStruct) DeleteEmployee(c *gin.Context) {
 	id := c.Param("employee_id")
-	
+
 	req := &pb.GetById{
 		Id: id,
 	}

@@ -107,61 +107,6 @@ func (x *Employee) GetHrId() string {
 	return ""
 }
 
-type EmployeeCreateBody struct {
-	state         protoimpl.MessageState
-	sizeCache     protoimpl.SizeCache
-	unknownFields protoimpl.UnknownFields
-
-	UserId   string `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
-	Position string `protobuf:"bytes,2,opt,name=position,proto3" json:"position,omitempty"`
-}
-
-func (x *EmployeeCreateBody) Reset() {
-	*x = EmployeeCreateBody{}
-	if protoimpl.UnsafeEnabled {
-		mi := &file_hr_proto_msgTypes[1]
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		ms.StoreMessageInfo(mi)
-	}
-}
-
-func (x *EmployeeCreateBody) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*EmployeeCreateBody) ProtoMessage() {}
-
-func (x *EmployeeCreateBody) ProtoReflect() protoreflect.Message {
-	mi := &file_hr_proto_msgTypes[1]
-	if protoimpl.UnsafeEnabled && x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use EmployeeCreateBody.ProtoReflect.Descriptor instead.
-func (*EmployeeCreateBody) Descriptor() ([]byte, []int) {
-	return file_hr_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *EmployeeCreateBody) GetUserId() string {
-	if x != nil {
-		return x.UserId
-	}
-	return ""
-}
-
-func (x *EmployeeCreateBody) GetPosition() string {
-	if x != nil {
-		return x.Position
-	}
-	return ""
-}
-
 type EmployeeCreate struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
@@ -169,13 +114,13 @@ type EmployeeCreate struct {
 
 	UserId   string `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
 	Position string `protobuf:"bytes,2,opt,name=position,proto3" json:"position,omitempty"`
-	HrId     string `protobuf:"bytes,4,opt,name=hr_id,json=hrId,proto3" json:"hr_id,omitempty"`
+	HrId     string `protobuf:"bytes,3,opt,name=hr_id,json=hrId,proto3" json:"hr_id,omitempty"`
 }
 
 func (x *EmployeeCreate) Reset() {
 	*x = EmployeeCreate{}
 	if protoimpl.UnsafeEnabled {
-		mi := &file_hr_proto_msgTypes[2]
+		mi := &file_hr_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		ms.StoreMessageInfo(mi)
 	}
@@ -188,7 +133,7 @@ func (x *EmployeeCreate) String() string {
 func (*EmployeeCreate) ProtoMessage() {}
 
 func (x *EmployeeCreate) ProtoReflect() protoreflect.Message {
-	mi := &file_hr_proto_msgTypes[2]
+	mi := &file_hr_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -201,7 +146,7 @@ func (x *EmployeeCreate) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use EmployeeCreate.ProtoReflect.Descriptor instead.
 func (*EmployeeCreate) Descriptor() ([]byte, []int) {
-	return file_hr_proto_rawDescGZIP(), []int{2}
+	return file_hr_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *EmployeeCreate) GetUserId() string {
@@ -221,6 +166,61 @@ func (x *EmployeeCreate) GetPosition() string {
 func (x *EmployeeCreate) GetHrId() string {
 	if x != nil {
 		return x.HrId
+	}
+	return ""
+}
+
+type EmployeeCreateBody struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	UserId   string `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	Position string `protobuf:"bytes,2,opt,name=position,proto3" json:"position,omitempty"`
+}
+
+func (x *EmployeeCreateBody) Reset() {
+	*x = EmployeeCreateBody{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_hr_proto_msgTypes[2]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *EmployeeCreateBody) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*EmployeeCreateBody) ProtoMessage() {}
+
+func (x *EmployeeCreateBody) ProtoReflect() protoreflect.Message {
+	mi := &file_hr_proto_msgTypes[2]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use EmployeeCreateBody.ProtoReflect.Descriptor instead.
+func (*EmployeeCreateBody) Descriptor() ([]byte, []int) {
+	return file_hr_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *EmployeeCreateBody) GetUserId() string {
+	if x != nil {
+		return x.UserId
+	}
+	return ""
+}
+
+func (x *EmployeeCreateBody) GetPosition() string {
+	if x != nil {
+		return x.Position
 	}
 	return ""
 }
@@ -468,17 +468,17 @@ var file_hr_proto_rawDesc = []byte{
 	0x42, 0x69, 0x72, 0x74, 0x68, 0x12, 0x1a, 0x0a, 0x08, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f,
 	0x6e, 0x18, 0x05, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f,
 	0x6e, 0x12, 0x13, 0x0a, 0x05, 0x68, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x06, 0x20, 0x01, 0x28, 0x09,
-	0x52, 0x04, 0x68, 0x72, 0x49, 0x64, 0x22, 0x49, 0x0a, 0x12, 0x45, 0x6d, 0x70, 0x6c, 0x6f, 0x79,
-	0x65, 0x65, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x42, 0x6f, 0x64, 0x79, 0x12, 0x17, 0x0a, 0x07,
-	0x75, 0x73, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x75,
-	0x73, 0x65, 0x72, 0x49, 0x64, 0x12, 0x1a, 0x0a, 0x08, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f,
-	0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f,
-	0x6e, 0x22, 0x5a, 0x0a, 0x0e, 0x45, 0x6d, 0x70, 0x6c, 0x6f, 0x79, 0x65, 0x65, 0x43, 0x72, 0x65,
-	0x61, 0x74, 0x65, 0x12, 0x17, 0x0a, 0x07, 0x75, 0x73, 0x65, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x01,
-	0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49, 0x64, 0x12, 0x1a, 0x0a, 0x08,
-	0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x08,
-	0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x13, 0x0a, 0x05, 0x68, 0x72, 0x5f, 0x69,
-	0x64, 0x18, 0x04, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x68, 0x72, 0x49, 0x64, 0x22, 0x40, 0x0a,
+	0x52, 0x04, 0x68, 0x72, 0x49, 0x64, 0x22, 0x5a, 0x0a, 0x0e, 0x45, 0x6d, 0x70, 0x6c, 0x6f, 0x79,
+	0x65, 0x65, 0x43, 0x72, 0x65, 0x61, 0x74, 0x65, 0x12, 0x17, 0x0a, 0x07, 0x75, 0x73, 0x65, 0x72,
+	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49,
+	0x64, 0x12, 0x1a, 0x0a, 0x08, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x08, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x13, 0x0a,
+	0x05, 0x68, 0x72, 0x5f, 0x69, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x04, 0x68, 0x72,
+	0x49, 0x64, 0x22, 0x49, 0x0a, 0x12, 0x45, 0x6d, 0x70, 0x6c, 0x6f, 0x79, 0x65, 0x65, 0x43, 0x72,
+	0x65, 0x61, 0x74, 0x65, 0x42, 0x6f, 0x64, 0x79, 0x12, 0x17, 0x0a, 0x07, 0x75, 0x73, 0x65, 0x72,
+	0x5f, 0x69, 0x64, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06, 0x75, 0x73, 0x65, 0x72, 0x49,
+	0x64, 0x12, 0x1a, 0x0a, 0x08, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x08, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x22, 0x40, 0x0a,
 	0x0d, 0x55, 0x70, 0x64, 0x61, 0x74, 0x65, 0x52, 0x65, 0x71, 0x42, 0x6f, 0x64, 0x79, 0x12, 0x1a,
 	0x0a, 0x08, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x18, 0x01, 0x20, 0x01, 0x28, 0x09,
 	0x52, 0x08, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e, 0x12, 0x13, 0x0a, 0x05, 0x68, 0x72,
@@ -538,8 +538,8 @@ func file_hr_proto_rawDescGZIP() []byte {
 var file_hr_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_hr_proto_goTypes = []any{
 	(*Employee)(nil),           // 0: black_list.Employee
-	(*EmployeeCreateBody)(nil), // 1: black_list.EmployeeCreateBody
-	(*EmployeeCreate)(nil),     // 2: black_list.EmployeeCreate
+	(*EmployeeCreate)(nil),     // 1: black_list.EmployeeCreate
+	(*EmployeeCreateBody)(nil), // 2: black_list.EmployeeCreateBody
 	(*UpdateReqBody)(nil),      // 3: black_list.UpdateReqBody
 	(*UpdateReq)(nil),          // 4: black_list.UpdateReq
 	(*ListEmployeeReq)(nil),    // 5: black_list.ListEmployeeReq
@@ -551,7 +551,7 @@ var file_hr_proto_goTypes = []any{
 var file_hr_proto_depIdxs = []int32{
 	7, // 0: black_list.ListEmployeeReq.filter:type_name -> black_list.Filter
 	0, // 1: black_list.ListEmployeeRes.employees:type_name -> black_list.Employee
-	2, // 2: black_list.HRService.Create:input_type -> black_list.EmployeeCreate
+	1, // 2: black_list.HRService.Create:input_type -> black_list.EmployeeCreate
 	8, // 3: black_list.HRService.Get:input_type -> black_list.GetById
 	5, // 4: black_list.HRService.GetAll:input_type -> black_list.ListEmployeeReq
 	4, // 5: black_list.HRService.Update:input_type -> black_list.UpdateReq
@@ -588,7 +588,7 @@ func file_hr_proto_init() {
 			}
 		}
 		file_hr_proto_msgTypes[1].Exporter = func(v any, i int) any {
-			switch v := v.(*EmployeeCreateBody); i {
+			switch v := v.(*EmployeeCreate); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -600,7 +600,7 @@ func file_hr_proto_init() {
 			}
 		}
 		file_hr_proto_msgTypes[2].Exporter = func(v any, i int) any {
-			switch v := v.(*EmployeeCreate); i {
+			switch v := v.(*EmployeeCreateBody); i {
 			case 0:
 				return &v.state
 			case 1:
