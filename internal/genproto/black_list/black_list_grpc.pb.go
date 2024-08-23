@@ -19,9 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion8
 
 const (
-	BlackListService_Add_FullMethodName    = "/black_list.BlackListService/Add"
-	BlackListService_GetAll_FullMethodName = "/black_list.BlackListService/GetAll"
-	BlackListService_Remove_FullMethodName = "/black_list.BlackListService/Remove"
+	BlackListService_Add_FullMethodName                     = "/black_list.BlackListService/Add"
+	BlackListService_GetAll_FullMethodName                  = "/black_list.BlackListService/GetAll"
+	BlackListService_Remove_FullMethodName                  = "/black_list.BlackListService/Remove"
+	BlackListService_MonitoringDailyReport_FullMethodName   = "/black_list.BlackListService/MonitoringDailyReport"
+	BlackListService_MonitoringWeeklyReport_FullMethodName  = "/black_list.BlackListService/MonitoringWeeklyReport"
+	BlackListService_MonitoringMonthlyReport_FullMethodName = "/black_list.BlackListService/MonitoringMonthlyReport"
 )
 
 // BlackListServiceClient is the client API for BlackListService service.
@@ -31,6 +34,9 @@ type BlackListServiceClient interface {
 	Add(ctx context.Context, in *BlackListCreate, opts ...grpc.CallOption) (*Void, error)
 	GetAll(ctx context.Context, in *Filter, opts ...grpc.CallOption) (*GetAllBlackListRes, error)
 	Remove(ctx context.Context, in *RemoveReq, opts ...grpc.CallOption) (*Void, error)
+	MonitoringDailyReport(ctx context.Context, in *Void, opts ...grpc.CallOption) (*Reports, error)
+	MonitoringWeeklyReport(ctx context.Context, in *Void, opts ...grpc.CallOption) (*Reports, error)
+	MonitoringMonthlyReport(ctx context.Context, in *Void, opts ...grpc.CallOption) (*Reports, error)
 }
 
 type blackListServiceClient struct {
@@ -71,6 +77,36 @@ func (c *blackListServiceClient) Remove(ctx context.Context, in *RemoveReq, opts
 	return out, nil
 }
 
+func (c *blackListServiceClient) MonitoringDailyReport(ctx context.Context, in *Void, opts ...grpc.CallOption) (*Reports, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Reports)
+	err := c.cc.Invoke(ctx, BlackListService_MonitoringDailyReport_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *blackListServiceClient) MonitoringWeeklyReport(ctx context.Context, in *Void, opts ...grpc.CallOption) (*Reports, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Reports)
+	err := c.cc.Invoke(ctx, BlackListService_MonitoringWeeklyReport_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *blackListServiceClient) MonitoringMonthlyReport(ctx context.Context, in *Void, opts ...grpc.CallOption) (*Reports, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Reports)
+	err := c.cc.Invoke(ctx, BlackListService_MonitoringMonthlyReport_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // BlackListServiceServer is the server API for BlackListService service.
 // All implementations must embed UnimplementedBlackListServiceServer
 // for forward compatibility
@@ -78,6 +114,9 @@ type BlackListServiceServer interface {
 	Add(context.Context, *BlackListCreate) (*Void, error)
 	GetAll(context.Context, *Filter) (*GetAllBlackListRes, error)
 	Remove(context.Context, *RemoveReq) (*Void, error)
+	MonitoringDailyReport(context.Context, *Void) (*Reports, error)
+	MonitoringWeeklyReport(context.Context, *Void) (*Reports, error)
+	MonitoringMonthlyReport(context.Context, *Void) (*Reports, error)
 	mustEmbedUnimplementedBlackListServiceServer()
 }
 
@@ -93,6 +132,15 @@ func (UnimplementedBlackListServiceServer) GetAll(context.Context, *Filter) (*Ge
 }
 func (UnimplementedBlackListServiceServer) Remove(context.Context, *RemoveReq) (*Void, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Remove not implemented")
+}
+func (UnimplementedBlackListServiceServer) MonitoringDailyReport(context.Context, *Void) (*Reports, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MonitoringDailyReport not implemented")
+}
+func (UnimplementedBlackListServiceServer) MonitoringWeeklyReport(context.Context, *Void) (*Reports, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MonitoringWeeklyReport not implemented")
+}
+func (UnimplementedBlackListServiceServer) MonitoringMonthlyReport(context.Context, *Void) (*Reports, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method MonitoringMonthlyReport not implemented")
 }
 func (UnimplementedBlackListServiceServer) mustEmbedUnimplementedBlackListServiceServer() {}
 
@@ -161,6 +209,60 @@ func _BlackListService_Remove_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _BlackListService_MonitoringDailyReport_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Void)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BlackListServiceServer).MonitoringDailyReport(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BlackListService_MonitoringDailyReport_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BlackListServiceServer).MonitoringDailyReport(ctx, req.(*Void))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BlackListService_MonitoringWeeklyReport_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Void)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BlackListServiceServer).MonitoringWeeklyReport(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BlackListService_MonitoringWeeklyReport_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BlackListServiceServer).MonitoringWeeklyReport(ctx, req.(*Void))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _BlackListService_MonitoringMonthlyReport_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Void)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(BlackListServiceServer).MonitoringMonthlyReport(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: BlackListService_MonitoringMonthlyReport_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(BlackListServiceServer).MonitoringMonthlyReport(ctx, req.(*Void))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // BlackListService_ServiceDesc is the grpc.ServiceDesc for BlackListService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -179,6 +281,18 @@ var BlackListService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Remove",
 			Handler:    _BlackListService_Remove_Handler,
+		},
+		{
+			MethodName: "MonitoringDailyReport",
+			Handler:    _BlackListService_MonitoringDailyReport_Handler,
+		},
+		{
+			MethodName: "MonitoringWeeklyReport",
+			Handler:    _BlackListService_MonitoringWeeklyReport_Handler,
+		},
+		{
+			MethodName: "MonitoringMonthlyReport",
+			Handler:    _BlackListService_MonitoringMonthlyReport_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

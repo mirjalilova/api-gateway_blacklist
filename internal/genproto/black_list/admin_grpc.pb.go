@@ -23,6 +23,7 @@ const (
 	AdminService_ListHR_FullMethodName      = "/black_list.AdminService/ListHR"
 	AdminService_Delete_FullMethodName      = "/black_list.AdminService/Delete"
 	AdminService_GetAllUsers_FullMethodName = "/black_list.AdminService/GetAllUsers"
+	AdminService_ChangeRole_FullMethodName  = "/black_list.AdminService/ChangeRole"
 )
 
 // AdminServiceClient is the client API for AdminService service.
@@ -33,6 +34,7 @@ type AdminServiceClient interface {
 	ListHR(ctx context.Context, in *Filter, opts ...grpc.CallOption) (*GetAllHRRes, error)
 	Delete(ctx context.Context, in *GetById, opts ...grpc.CallOption) (*Void, error)
 	GetAllUsers(ctx context.Context, in *ListUserReq, opts ...grpc.CallOption) (*ListUserRes, error)
+	ChangeRole(ctx context.Context, in *ChangeRoleReq, opts ...grpc.CallOption) (*Void, error)
 }
 
 type adminServiceClient struct {
@@ -83,6 +85,16 @@ func (c *adminServiceClient) GetAllUsers(ctx context.Context, in *ListUserReq, o
 	return out, nil
 }
 
+func (c *adminServiceClient) ChangeRole(ctx context.Context, in *ChangeRoleReq, opts ...grpc.CallOption) (*Void, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Void)
+	err := c.cc.Invoke(ctx, AdminService_ChangeRole_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AdminServiceServer is the server API for AdminService service.
 // All implementations must embed UnimplementedAdminServiceServer
 // for forward compatibility
@@ -91,6 +103,7 @@ type AdminServiceServer interface {
 	ListHR(context.Context, *Filter) (*GetAllHRRes, error)
 	Delete(context.Context, *GetById) (*Void, error)
 	GetAllUsers(context.Context, *ListUserReq) (*ListUserRes, error)
+	ChangeRole(context.Context, *ChangeRoleReq) (*Void, error)
 	mustEmbedUnimplementedAdminServiceServer()
 }
 
@@ -109,6 +122,9 @@ func (UnimplementedAdminServiceServer) Delete(context.Context, *GetById) (*Void,
 }
 func (UnimplementedAdminServiceServer) GetAllUsers(context.Context, *ListUserReq) (*ListUserRes, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetAllUsers not implemented")
+}
+func (UnimplementedAdminServiceServer) ChangeRole(context.Context, *ChangeRoleReq) (*Void, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ChangeRole not implemented")
 }
 func (UnimplementedAdminServiceServer) mustEmbedUnimplementedAdminServiceServer() {}
 
@@ -195,6 +211,24 @@ func _AdminService_GetAllUsers_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AdminService_ChangeRole_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ChangeRoleReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminServiceServer).ChangeRole(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminService_ChangeRole_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminServiceServer).ChangeRole(ctx, req.(*ChangeRoleReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AdminService_ServiceDesc is the grpc.ServiceDesc for AdminService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -217,6 +251,10 @@ var AdminService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetAllUsers",
 			Handler:    _AdminService_GetAllUsers_Handler,
+		},
+		{
+			MethodName: "ChangeRole",
+			Handler:    _AdminService_ChangeRole_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

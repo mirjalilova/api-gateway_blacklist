@@ -132,3 +132,72 @@ func (h *HandlerStruct) RemoveEmployee(c *gin.Context) {
 	slog.Info("Removed employee successfully from blacklist")
 	c.JSON(200, "Removed employee successfully from blacklist")
 }
+
+// @Summary             Monitoring daily blacklist
+// @Description         Monitoring daily blacklist
+// @Tags                Monitoring
+// @Accept              json
+// @Produce             json
+// @Security            BearerAuth
+// @Success 200         {object} black_list.Reports
+// @Failure 400         {string} Error "Bad Request"
+// @Failure 404         {string} Error "Not Found"
+// @Failure 500         {string} Error "Internal Server Error"
+// @Router              /blacklist/all [GET]
+func (h *HandlerStruct) GetDaily(c *gin.Context) {
+	res, err := h.Clients.BlacklistClient.MonitoringDailyReport(context.Background(), &pb.Void{})
+	if err != nil {
+        slog.Error("Error while getting daily blacklist")
+        c.JSON(400, gin.H{"error": err.Error()})
+        return
+    }
+
+	slog.Info("Daily blacklist retrieved successfully")
+	c.JSON(200, res)
+}
+
+// @Summary             Monitoring weekly blacklist
+// @Description         Monitoring weekly blacklist
+// @Tags                Monitoring
+// @Accept              json
+// @Produce             json
+// @Security            BearerAuth
+// @Success 200         {object} black_list.Reports
+// @Failure 400         {string} Error "Bad Request"
+// @Failure 404         {string} Error "Not Found"
+// @Failure 500         {string} Error "Internal Server Error"
+// @Router              /blacklist/all [GET]
+func (h *HandlerStruct) GetWeekly(c *gin.Context) {
+	res, err := h.Clients.BlacklistClient.MonitoringWeeklyReport(context.Background(), &pb.Void{})
+	if err != nil {
+        slog.Error("Error while getting daily blacklist")
+        c.JSON(400, gin.H{"error": err.Error()})
+        return
+    }
+
+	slog.Info("Daily blacklist retrieved successfully")
+	c.JSON(200, res)
+}
+
+// @Summary             Monitoring monthly blacklist
+// @Description         Monitoring monthly blacklist
+// @Tags                Monitoring
+// @Accept              json
+// @Produce             json
+// @Security            BearerAuth
+// @Success 200         {object} black_list.Reports
+// @Failure 400         {string} Error "Bad Request"
+// @Failure 404         {string} Error "Not Found"
+// @Failure 500         {string} Error "Internal Server Error"
+// @Router              /blacklist/all [GET]
+func (h *HandlerStruct) GetMonthly(c *gin.Context) {
+	res, err := h.Clients.BlacklistClient.MonitoringMonthlyReport(context.Background(), &pb.Void{})
+	if err != nil {
+        slog.Error("Error while getting daily blacklist")
+        c.JSON(400, gin.H{"error": err.Error()})
+        return
+    }
+
+	slog.Info("Daily blacklist retrieved successfully")
+	c.JSON(200, res)
+}

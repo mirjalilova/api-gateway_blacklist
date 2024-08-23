@@ -58,6 +58,63 @@ const docTemplate = `{
                 }
             }
         },
+        "/admin/changerole": {
+            "put": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Change role of a user",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Change role",
+                "parameters": [
+                    {
+                        "description": "Employee",
+                        "name": "user",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/black_list.UpdateReqBody"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Employee updated successfully",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/admin/delete_hr/{hr_id}": {
             "delete": {
                 "security": [
@@ -155,6 +212,72 @@ const docTemplate = `{
                 }
             }
         },
+        "/admin/users": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Get all users",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Admin"
+                ],
+                "summary": "Get all users",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "UserName",
+                        "name": "username",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Full Name",
+                        "name": "full_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Offset",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/black_list.ListUserRes"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
         "/blacklist/add": {
             "post": {
                 "security": [
@@ -219,7 +342,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Get all employee from blacklist",
+                "description": "Monitoring monthly blacklist",
                 "consumes": [
                     "application/json"
                 ],
@@ -227,28 +350,14 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "Black List"
+                    "Monitoring"
                 ],
-                "summary": "Get all employee from blacklist",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "Limit",
-                        "name": "limit",
-                        "in": "query"
-                    },
-                    {
-                        "type": "integer",
-                        "description": "Offset",
-                        "name": "offset",
-                        "in": "query"
-                    }
-                ],
+                "summary": "Monitoring monthly blacklist",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/black_list.GetAllBlackListRes"
+                            "$ref": "#/definitions/black_list.Reports"
                         }
                     },
                     "400": {
@@ -418,7 +527,7 @@ const docTemplate = `{
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/black_list.EmployeeCreate"
+                            "$ref": "#/definitions/black_list.EmployeeCreateBody"
                         }
                     }
                 ],
@@ -678,12 +787,9 @@ const docTemplate = `{
                 }
             }
         },
-        "black_list.EmployeeCreate": {
+        "black_list.EmployeeCreateBody": {
             "type": "object",
             "properties": {
-                "hr_id": {
-                    "type": "string"
-                },
                 "position": {
                     "type": "string"
                 },
@@ -754,6 +860,45 @@ const docTemplate = `{
                 }
             }
         },
+        "black_list.ListUserRes": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/black_list.UserRes"
+                    }
+                }
+            }
+        },
+        "black_list.Report": {
+            "type": "object",
+            "properties": {
+                "blacklisted_at": {
+                    "type": "string"
+                },
+                "full_name": {
+                    "type": "string"
+                }
+            }
+        },
+        "black_list.Reports": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "reports": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/black_list.Report"
+                    }
+                }
+            }
+        },
         "black_list.UpdateReqBody": {
             "type": "object",
             "properties": {
@@ -761,6 +906,29 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "position": {
+                    "type": "string"
+                }
+            }
+        },
+        "black_list.UserRes": {
+            "type": "object",
+            "properties": {
+                "DateOfBirth": {
+                    "type": "string"
+                },
+                "Email": {
+                    "type": "string"
+                },
+                "FullName": {
+                    "type": "string"
+                },
+                "Id": {
+                    "type": "string"
+                },
+                "Role": {
+                    "type": "string"
+                },
+                "Username": {
                     "type": "string"
                 }
             }

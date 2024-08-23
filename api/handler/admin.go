@@ -148,7 +148,7 @@ func getuserId(ctx *gin.Context) string {
 // @Success 200 {object} black_list.ListUserRes
 // @Failure 400 {object} string "Bad Request"
 // @Failure 500 {object} string "Internal Server Error"
-// @Router admin/users [get]
+// @Router /admin/users [get]
 func (h *HandlerStruct) GetAllUsers(c *gin.Context) {
 	limit := c.Query("limit")
 	offset := c.Query("offset")
@@ -195,4 +195,36 @@ func (h *HandlerStruct) GetAllUsers(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, res)
+}
+
+// @Summary 			Change role
+// @Description		 	Change role of a user
+// @Tags 				Admin
+// @Accept 				json
+// @Produce 			json
+// @Security            BearerAuth
+// @Param  				user body black_list.UpdateReqBody true "Employee"
+// @Success 200			{object} string "Employee updated successfully"
+// @Failure 400         {string} Error "Bad Request"
+// @Failure 404         {string} Error "Not Found"
+// @Failure 500         {string} Error "Internal Server Error"
+// @Router 				/admin/changerole [PUT]
+func (h *HandlerStruct) ChangeRole(c *gin.Context) {
+    var req pb.ChangeRoleReq
+
+    if err := c.ShouldBindJSON(&req); err != nil {
+        slog.Error("failed to bind JSON: %v", err)
+        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        return
+    }
+
+    _, err := h.Clients.AdminClient.ChangeRole(context.Background(), &req)
+	if err != nil {
+        slog.Error("failed to update user: %v", err)
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+        return
+    }
+
+	slog.Info("Employee updated successfully")
+	c.JSON(http.StatusOK, "Employee updated successfully")
 }

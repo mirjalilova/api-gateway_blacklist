@@ -34,10 +34,8 @@ definitions:
       position:
         type: string
     type: object
-  black_list.EmployeeCreate:
+  black_list.EmployeeCreateBody:
     properties:
-      hr_id:
-        type: string
       position:
         type: string
       user_id:
@@ -83,11 +81,51 @@ definitions:
           $ref: '#/definitions/black_list.Employee'
         type: array
     type: object
+  black_list.ListUserRes:
+    properties:
+      count:
+        type: integer
+      users:
+        items:
+          $ref: '#/definitions/black_list.UserRes'
+        type: array
+    type: object
+  black_list.Report:
+    properties:
+      blacklisted_at:
+        type: string
+      full_name:
+        type: string
+    type: object
+  black_list.Reports:
+    properties:
+      count:
+        type: integer
+      reports:
+        items:
+          $ref: '#/definitions/black_list.Report'
+        type: array
+    type: object
   black_list.UpdateReqBody:
     properties:
       hr_id:
         type: string
       position:
+        type: string
+    type: object
+  black_list.UserRes:
+    properties:
+      DateOfBirth:
+        type: string
+      Email:
+        type: string
+      FullName:
+        type: string
+      Id:
+        type: string
+      Role:
+        type: string
+      Username:
         type: string
     type: object
 info:
@@ -121,6 +159,42 @@ paths:
       security:
       - BearerAuth: []
       summary: Create a new hr
+      tags:
+      - Admin
+  /admin/changerole:
+    put:
+      consumes:
+      - application/json
+      description: Change role of a user
+      parameters:
+      - description: Employee
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/black_list.UpdateReqBody'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Employee updated successfully
+          schema:
+            type: string
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Change role
       tags:
       - Admin
   /admin/delete_hr/{hr_id}:
@@ -184,6 +258,48 @@ paths:
       summary: Get hr list
       tags:
       - Admin
+  /admin/users:
+    get:
+      consumes:
+      - application/json
+      description: Get all users
+      parameters:
+      - description: UserName
+        in: query
+        name: username
+        type: string
+      - description: Full Name
+        in: query
+        name: full_name
+        type: string
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/black_list.ListUserRes'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get all users
+      tags:
+      - Admin
   /blacklist/add:
     post:
       consumes:
@@ -224,23 +340,14 @@ paths:
     get:
       consumes:
       - application/json
-      description: Get all employee from blacklist
-      parameters:
-      - description: Limit
-        in: query
-        name: limit
-        type: integer
-      - description: Offset
-        in: query
-        name: offset
-        type: integer
+      description: Monitoring monthly blacklist
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/black_list.GetAllBlackListRes'
+            $ref: '#/definitions/black_list.Reports'
         "400":
           description: Bad Request
           schema:
@@ -255,9 +362,9 @@ paths:
             type: string
       security:
       - BearerAuth: []
-      summary: Get all employee from blacklist
+      summary: Monitoring monthly blacklist
       tags:
-      - Black List
+      - Monitoring
   /blacklist/remove/{employee_id}:
     delete:
       consumes:
@@ -415,7 +522,7 @@ paths:
         name: data
         required: true
         schema:
-          $ref: '#/definitions/black_list.EmployeeCreate'
+          $ref: '#/definitions/black_list.EmployeeCreateBody'
       produces:
       - application/json
       responses:
