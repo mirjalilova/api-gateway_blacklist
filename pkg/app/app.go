@@ -1,6 +1,7 @@
 package app
 
 import (
+	"github.com/go-redis/redis/v8"
 	"github.com/mirjalilova/api-gateway_blacklist/api"
 	"github.com/mirjalilova/api-gateway_blacklist/api/handler"
 	_ "github.com/mirjalilova/api-gateway_blacklist/docs"
@@ -18,14 +19,14 @@ func Run(cfg *config.Config) {
 	// 	return
 	// }
 
-	// // Redis
-	// rd := redis.NewClient(&redis.Options{
-	// 	Addr:     "redis:6379",
-	// 	Password: "",
-	// 	DB:       0,
-	// })
+	// Redis
+	rd := redis.NewClient(&redis.Options{
+		Addr:     "redis:6379",
+		Password: "",
+		DB:       0,
+	})
 
-	h := handler.NewHandlerStruct(cfg)
+	h := handler.NewHandlerStruct(cfg, rd)
 
 	router := api.NewGin(h)
 	if err := router.Run(cfg.API_GATEWAY); err != nil {

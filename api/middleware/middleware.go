@@ -71,6 +71,8 @@ func CheckPermission(path string, r *http.Request, enforcer *casbin.Enforcer) (b
 	}
 	method := r.Method
 
+	slog.Info("Checking permission for role: ", role, " path: ", path, " method:", method)
+
 	allowed, err := enforcer.Enforce(role, path, method)
 	if err != nil {
 		slog.Error("Error while comparing role from csv list: ", err)

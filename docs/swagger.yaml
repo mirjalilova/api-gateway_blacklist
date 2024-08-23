@@ -19,6 +19,13 @@ definitions:
       reason:
         type: string
     type: object
+  black_list.ChangeRoleReq:
+    properties:
+      role:
+        type: string
+      user_id:
+        type: string
+    type: object
   black_list.Employee:
     properties:
       DateOfBirth:
@@ -161,7 +168,7 @@ paths:
       summary: Create a new hr
       tags:
       - Admin
-  /admin/changerole:
+  /admin/change_role:
     put:
       consumes:
       - application/json
@@ -172,7 +179,7 @@ paths:
         name: user
         required: true
         schema:
-          $ref: '#/definitions/black_list.UpdateReqBody'
+          $ref: '#/definitions/black_list.ChangeRoleReq'
       produces:
       - application/json
       responses:
@@ -340,6 +347,73 @@ paths:
     get:
       consumes:
       - application/json
+      description: Get all employee from blacklist
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/black_list.GetAllBlackListRes'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get all employee from blacklist
+      tags:
+      - Black List
+  /blacklist/daily:
+    get:
+      consumes:
+      - application/json
+      description: Monitoring daily blacklist
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/black_list.Reports'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Monitoring daily blacklist
+      tags:
+      - Monitoring
+  /blacklist/monthly:
+    get:
+      consumes:
+      - application/json
       description: Monitoring monthly blacklist
       produces:
       - application/json
@@ -400,6 +474,35 @@ paths:
       summary: Remove employee from blacklist
       tags:
       - Black List
+  /blacklist/weekly:
+    get:
+      consumes:
+      - application/json
+      description: Monitoring weekly blacklist
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/black_list.Reports'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Monitoring weekly blacklist
+      tags:
+      - Monitoring
   /employee/{employee_id}:
     delete:
       consumes:

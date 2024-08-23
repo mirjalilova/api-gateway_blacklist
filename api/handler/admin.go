@@ -203,12 +203,12 @@ func (h *HandlerStruct) GetAllUsers(c *gin.Context) {
 // @Accept 				json
 // @Produce 			json
 // @Security            BearerAuth
-// @Param  				user body black_list.UpdateReqBody true "Employee"
+// @Param  				user body black_list.ChangeRoleReq true "Employee"
 // @Success 200			{object} string "Employee updated successfully"
 // @Failure 400         {string} Error "Bad Request"
 // @Failure 404         {string} Error "Not Found"
 // @Failure 500         {string} Error "Internal Server Error"
-// @Router 				/admin/changerole [PUT]
+// @Router 				/admin/change_role [PUT]
 func (h *HandlerStruct) ChangeRole(c *gin.Context) {
     var req pb.ChangeRoleReq
 

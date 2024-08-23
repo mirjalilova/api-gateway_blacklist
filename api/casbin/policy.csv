@@ -1,25 +1,50 @@
-p, unauthorized, /,                      GET
+p, unauthorized, /,                           GET
 
-p, admin, /admin/approve/:user_id,       POST
-p, admin, /admin/hr_list,                GET
-p, admin, /admin/delete_hr/:hr_id,       DELETE
+p, superadmin, /admin/change_role,            PUT 
+p, superadmin, /admin/approve/:user_id,       POST
+p, superadmin, /admin/hr_list,                GET
+p, superadmin, /admin/delete_hr/:hr_id,       DELETE
+p, superadmin, /admin/users,                  GET
 
-p, hr, /employee/create,                 POST
-p, hr, /employee/:employee_id,           GET
-p, hr, /employee/all,                    GET
-p, hr, /employee/update/:employee_id,    PUT
-p, hr, /employee/:employee_id,           DELETE
+p, superadmin, /employee/create,              POST
+p, superadmin, /employee/:employee_id,        GET
+p, superadmin, /employee/all,                 GET
+p, superadmin, /employee/update/:employee_id, PUT
+p, superadmin, /employee/:employee_id,        DELETE
 
-p, hr, /blacklist/add,                   POST
-p, hr, /blacklist/all,                   GET
-p, hr, /blacklist/:employee_id,          DELETE
+p, superadmin, /blacklist/add,                POST
+p, superadmin, /blacklist/all,                GET
+p, superadmin, /blacklist/:employee_id,       DELETE
+p, superadmin, /blacklist/daily,              GET
+p, superadmin, /blacklist/weekly,             GET
+p, superadmin, /blacklist/monthly,            GET
 
-p, admin, /employee/create,              POST
-p, admin, /employee/:employee_id,        GET
-p, admin, /employee/all,                 GET
-p, admin, /employee/update/:employee_id, PUT
-p, admin, /employee/:employee_id,        DELETE
+p, admin, /admin/approve/:user_id,            POST
+p, admin, /admin/hr_list,                     GET
+p, admin, /admin/delete_hr/:hr_id,            DELETE
+p, admin, /admin/users,                       GET
+ 
+p, hr, /employee/create,                      POST
+p, hr, /employee/:employee_id,                GET
+p, hr, /employee/all,                         GET
+p, hr, /employee/update/:employee_id,         PUT
+p, hr, /employee/:employee_id,                DELETE
 
-p, admin, /blacklist/add,                POST
-p, admin, /blacklist/all,                GET
-p, admin, /blacklist/:employee_id,       DELETE
+p, hr, /blacklist/add,                        POST
+p, hr, /blacklist/all,                        GET
+p, hr, /blacklist/:employee_id,               DELETE
+p, hr, /blacklist/daily,                      GET
+p, hr, /blacklist/weekly,                     GET
+p, hr, /blacklist/monthly,                    GET
+
+p, employee, /blacklist/daily,                GET
+p, employee, /blacklist/weekly,               GET
+p, employee, /blacklist/monthly,              GET
+
+p, user, /blacklist/daily,                    GET
+p, user, /blacklist/weekly,                   GET
+p, user, /blacklist/monthly,                  GET
+
+p, unauthorized, /blacklist/daily,            GET
+p, unauthorized, /blacklist/weekly,           GET
+p, unauthorized, /blacklist/monthly,          GET

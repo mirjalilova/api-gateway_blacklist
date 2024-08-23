@@ -7,6 +7,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	pb "github.com/mirjalilova/api-gateway_blacklist/internal/genproto/black_list"
+	rd "github.com/mirjalilova/api-gateway_blacklist/pkg/helper"
 )
 
 // @Summary 			Add employee to black list
@@ -31,8 +32,8 @@ func (h *HandlerStruct) AddEmployee(c *gin.Context) {
 
 	req := &pb.BlackListCreate{
 		EmployeeId: body.EmployeeId,
-		Reason: body.Reason,
-		AddedBy: getuserId(c),
+		Reason:     body.Reason,
+		AddedBy:    getuserId(c),
 	}
 	_, err := h.Clients.BlacklistClient.Add(context.Background(), req)
 	if err != nil {
@@ -40,6 +41,9 @@ func (h *HandlerStruct) AddEmployee(c *gin.Context) {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
+
+	// Clear relevant cache keys
+	h.Redis.Del(c, "daily:", "weekly:", "monthly:")
 
 	slog.Info("Add employee to blacklist successfully")
 	c.JSON(200, gin.H{"message": "Add employee to blacklist successfully"})
@@ -86,7 +90,7 @@ func (h *HandlerStruct) GetAll(c *gin.Context) {
 	}
 
 	req := &pb.Filter{
-		Limit: int32(limitValue),
+		Limit:  int32(limitValue),
 		Offset: int32(offsetValue),
 	}
 
@@ -101,9 +105,8 @@ func (h *HandlerStruct) GetAll(c *gin.Context) {
 	c.JSON(200, lists)
 }
 
-
-// @Summary 			Remove employee from blacklist 
-// @Description		 	Remove employee from blacklist 
+// @Summary 			Remove employee from blacklist
+// @Description		 	Remove employee from blacklist
 // @Tags 				Black List
 // @Accept 				json
 // @Produce 			json
@@ -119,7 +122,7 @@ func (h *HandlerStruct) RemoveEmployee(c *gin.Context) {
 
 	req := &pb.RemoveReq{
 		EmployeeId: id,
-		AddedBy: getuserId(c),
+		AddedBy:    getuserId(c),
 	}
 
 	_, err := h.Clients.BlacklistClient.Remove(context.Background(), req)
@@ -129,6 +132,9 @@ func (h *HandlerStruct) RemoveEmployee(c *gin.Context) {
 		return
 	}
 
+	// Clear relevant cache keys
+	h.Redis.Del(c, "daily:", "weekly:", "monthly:")
+	
 	slog.Info("Removed employee successfully from blacklist")
 	c.JSON(200, "Removed employee successfully from blacklist")
 }
@@ -143,14 +149,29 @@ func (h *HandlerStruct) RemoveEmployee(c *gin.Context) {
 // @Failure 400         {string} Error "Bad Request"
 // @Failure 404         {string} Error "Not Found"
 // @Failure 500         {string} Error "Internal Server Error"
-// @Router              /blacklist/all [GET]
+// @Router              /blacklist/daily [GET]
 func (h *HandlerStruct) GetDaily(c *gin.Context) {
-	res, err := h.Clients.BlacklistClient.MonitoringDailyReport(context.Background(), &pb.Void{})
+	cacheKey := "daily:"
+
+	res := pb.Reports{}
+
+	err := rd.GetCachedData(c, h.Redis, cacheKey, &res)
+	if err == nil {
+		slog.Info("Weekly data retrieved from cache")
+		c.JSON(200, res)
+		return
+	}
+
+	resp, err := h.Clients.BlacklistClient.MonitoringDailyReport(context.Background(), &pb.Void{})
 	if err != nil {
-        slog.Error("Error while getting daily blacklist")
-        c.JSON(400, gin.H{"error": err.Error()})
-        return
-    }
+		slog.Error("Error while getting daily blacklist")
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	res = *resp
+
+	rd.CacheData(c, h.Redis, cacheKey, res)
 
 	slog.Info("Daily blacklist retrieved successfully")
 	c.JSON(200, res)
@@ -166,14 +187,29 @@ func (h *HandlerStruct) GetDaily(c *gin.Context) {
 // @Failure 400         {string} Error "Bad Request"
 // @Failure 404         {string} Error "Not Found"
 // @Failure 500         {string} Error "Internal Server Error"
-// @Router              /blacklist/all [GET]
+// @Router              /blacklist/weekly [GET]
 func (h *HandlerStruct) GetWeekly(c *gin.Context) {
-	res, err := h.Clients.BlacklistClient.MonitoringWeeklyReport(context.Background(), &pb.Void{})
+	cacheKey := "weekly:"
+
+	res := pb.Reports{}
+
+	err := rd.GetCachedData(c, h.Redis, cacheKey, &res)
+	if err == nil {
+		slog.Info("Weekly data retrieved from cache")
+		c.JSON(200, res)
+		return
+	}
+
+	resp, err := h.Clients.BlacklistClient.MonitoringWeeklyReport(context.Background(), &pb.Void{})
 	if err != nil {
-        slog.Error("Error while getting daily blacklist")
-        c.JSON(400, gin.H{"error": err.Error()})
-        return
-    }
+		slog.Error("Error while getting daily blacklist")
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	res = *resp
+
+	rd.CacheData(c, h.Redis, cacheKey, res)
 
 	slog.Info("Daily blacklist retrieved successfully")
 	c.JSON(200, res)
@@ -189,14 +225,29 @@ func (h *HandlerStruct) GetWeekly(c *gin.Context) {
 // @Failure 400         {string} Error "Bad Request"
 // @Failure 404         {string} Error "Not Found"
 // @Failure 500         {string} Error "Internal Server Error"
-// @Router              /blacklist/all [GET]
+// @Router              /blacklist/monthly [GET]
 func (h *HandlerStruct) GetMonthly(c *gin.Context) {
-	res, err := h.Clients.BlacklistClient.MonitoringMonthlyReport(context.Background(), &pb.Void{})
+	cacheKey := "monthly:"
+
+	res := pb.Reports{}
+
+	err := rd.GetCachedData(c, h.Redis, cacheKey, &res)
+	if err == nil {
+		slog.Info("Weekly data retrieved from cache")
+		c.JSON(200, res)
+		return
+	}
+
+	resp, err := h.Clients.BlacklistClient.MonitoringMonthlyReport(context.Background(), &pb.Void{})
 	if err != nil {
-        slog.Error("Error while getting daily blacklist")
-        c.JSON(400, gin.H{"error": err.Error()})
-        return
-    }
+		slog.Error("Error while getting daily blacklist")
+		c.JSON(400, gin.H{"error": err.Error()})
+		return
+	}
+
+	res = *resp
+
+	rd.CacheData(c, h.Redis, cacheKey, res)
 
 	slog.Info("Daily blacklist retrieved successfully")
 	c.JSON(200, res)

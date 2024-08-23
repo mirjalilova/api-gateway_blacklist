@@ -53,6 +53,8 @@ func NewGin(h *handler.HandlerStruct) *gin.Engine {
 		admin.POST("/approve/:user_id", h.Approve)
 		admin.GET("/hr_list", h.ListHR)
 		admin.DELETE("/delete_hr/:hr_id", h.DeleteHR)
+		admin.GET("/users", h.GetAllUsers)
+		admin.PUT("/change_role/", h.ChangeRole)
 	}
 
 	hr := router.Group("/employee").Use(middlerware.NewAuth(enforcer))
@@ -64,11 +66,14 @@ func NewGin(h *handler.HandlerStruct) *gin.Engine {
 		hr.DELETE("/:employee_id", h.DeleteEmployee)
 	}
 
-	HR := router.Group("/blacklist").Use(middlerware.NewAuth(enforcer))
+	bk := router.Group("/blacklist").Use(middlerware.NewAuth(enforcer))
 	{
-		HR.POST("/add", h.AddEmployee)
-		HR.GET("/all", h.GetAll)
-		HR.DELETE("/remove/:employee_id", h.RemoveEmployee)
+		bk.POST("/add", h.AddEmployee)
+		bk.GET("/all", h.GetAll)
+		bk.DELETE("/remove/:employee_id", h.RemoveEmployee)
+		bk.GET("/daily", h.GetDaily)
+		bk.GET("/weekly", h.GetWeekly)
+		bk.GET("/monthly", h.GetMonthly)
 
 	}
 
