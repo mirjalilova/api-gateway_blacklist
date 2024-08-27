@@ -151,19 +151,19 @@ func (h *HandlerStruct) RemoveEmployee(c *gin.Context) {
 // @Failure 500         {string} Error "Internal Server Error"
 // @Router              /blacklist/daily [GET]
 func (h *HandlerStruct) GetDaily(c *gin.Context) {
-	cacheKey := "daily:"
+	// cacheKey := "daily:"
 
-	res := pb.Reports{}
+	// res := pb.Reports{}
 
-	slog.Info("ssssssssssssssss")
+	// slog.Info("ssssssssssssssss")
 
-	err := rd.GetCachedData(c, h.Redis, cacheKey, &res)
-	slog.Info("ssssssssssssssssssssssss, err:", err)
-	if err == nil {
-		slog.Info("Weekly data retrieved from cache")
-		c.JSON(200, res)
-		return
-	}
+	// err := rd.GetCachedData(c, h.Redis, cacheKey, &res)
+	// slog.Info("ssssssssssssssssssssssss, err:", err)
+	// if err == nil {
+	// 	slog.Info("Weekly data retrieved from cache")
+	// 	c.JSON(200, res)
+	// 	return
+	// }
 
 	resp, err := h.Clients.BlacklistClient.MonitoringDailyReport(context.Background(), &pb.Void{})
 	slog.Info("ssssssssssssssssssssssss, err:", err)
@@ -173,16 +173,16 @@ func (h *HandlerStruct) GetDaily(c *gin.Context) {
 		return
 	}
 
-	slog.Info("ssssssssssssssssssssssss, resp:", resp)
-	res = *resp
-	slog.Info("ssssssssssssssssssssssss, res:", res)
+	// slog.Info("ssssssssssssssssssssssss, resp:", resp)
+	// res = *resp
+	// slog.Info("ssssssssssssssssssssssss, res:", res)
 
-	rd.CacheData(c, h.Redis, cacheKey, res)
-	slog.Info("ssssssssssssssssssssssss, res:", res)
+	// rd.CacheData(c, h.Redis, cacheKey, res)
+	// slog.Info("ssssssssssssssssssssssss, res:", res)
 	
 
 	slog.Info("Daily blacklist retrieved successfully")
-	c.JSON(200, res)
+	c.JSON(200, resp)
 }
 
 // @Summary             Monitoring weekly blacklist
@@ -197,16 +197,16 @@ func (h *HandlerStruct) GetDaily(c *gin.Context) {
 // @Failure 500         {string} Error "Internal Server Error"
 // @Router              /blacklist/weekly [GET]
 func (h *HandlerStruct) GetWeekly(c *gin.Context) {
-	cacheKey := "weekly:"
+	// cacheKey := "weekly:"
 
-	res := pb.Reports{}
+	// res := pb.Reports{}
 
-	err := rd.GetCachedData(c, h.Redis, cacheKey, &res)
-	if err == nil {
-		slog.Info("Weekly data retrieved from cache")
-		c.JSON(200, res)
-		return
-	}
+	// err := rd.GetCachedData(c, h.Redis, cacheKey, &res)
+	// if err == nil {
+	// 	slog.Info("Weekly data retrieved from cache")
+	// 	c.JSON(200, res)
+	// 	return
+	// }
 
 	resp, err := h.Clients.BlacklistClient.MonitoringWeeklyReport(context.Background(), &pb.Void{})
 	if err != nil {
@@ -215,12 +215,12 @@ func (h *HandlerStruct) GetWeekly(c *gin.Context) {
 		return
 	}
 
-	res = *resp
+	// res = *resp
 
-	rd.CacheData(c, h.Redis, cacheKey, res)
+	// rd.CacheData(c, h.Redis, cacheKey, res)
 
 	slog.Info("Daily blacklist retrieved successfully")
-	c.JSON(200, res)
+	c.JSON(200, resp)
 }
 
 // @Summary             Monitoring monthly blacklist
@@ -235,16 +235,16 @@ func (h *HandlerStruct) GetWeekly(c *gin.Context) {
 // @Failure 500         {string} Error "Internal Server Error"
 // @Router              /blacklist/monthly [GET]
 func (h *HandlerStruct) GetMonthly(c *gin.Context) {
-	cacheKey := "monthly:"
+	// cacheKey := "monthly:"
 
-	res := pb.Reports{}
+	// res := pb.Reports{}
 
-	err := rd.GetCachedData(c, h.Redis, cacheKey, &res)
-	if err == nil {
-		slog.Info("Weekly data retrieved from cache")
-		c.JSON(200, res)
-		return
-	}
+	// err := rd.GetCachedData(c, h.Redis, cacheKey, &res)
+	// if err == nil {
+	// 	slog.Info("Weekly data retrieved from cache")
+	// 	c.JSON(200, res)
+	// 	return
+	// }
 
 	resp, err := h.Clients.BlacklistClient.MonitoringMonthlyReport(context.Background(), &pb.Void{})
 	if err != nil {
@@ -253,10 +253,10 @@ func (h *HandlerStruct) GetMonthly(c *gin.Context) {
 		return
 	}
 
-	res = *resp
+	// res = *resp
 
-	rd.CacheData(c, h.Redis, cacheKey, res)
+	// rd.CacheData(c, h.Redis, cacheKey, res)
 
 	slog.Info("Daily blacklist retrieved successfully")
-	c.JSON(200, res)
+	c.JSON(200, resp)
 }
