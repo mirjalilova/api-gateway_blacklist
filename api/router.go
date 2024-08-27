@@ -9,7 +9,6 @@ import (
 	"golang.org/x/exp/slog"
 
 	"github.com/casbin/casbin/v2"
-	"github.com/gin-contrib/cors"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
