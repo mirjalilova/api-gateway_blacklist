@@ -97,7 +97,7 @@ func (h *HandlerStruct) GetAll(c *gin.Context) {
 	lists, err := h.Clients.BlacklistClient.GetAll(context.Background(), req)
 	if err != nil {
 		slog.Error("Error while getting blacklist")
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(400, gin.H{"error": err})
 		return
 	}
 
@@ -128,7 +128,7 @@ func (h *HandlerStruct) RemoveEmployee(c *gin.Context) {
 	_, err := h.Clients.BlacklistClient.Remove(context.Background(), req)
 	if err != nil {
 		slog.Error("Error while remove employee from blacklist")
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(400, gin.H{"error": err})
 		return
 	}
 
@@ -165,7 +165,7 @@ func (h *HandlerStruct) GetDaily(c *gin.Context) {
 	resp, err := h.Clients.BlacklistClient.MonitoringDailyReport(context.Background(), &pb.Void{})
 	if err != nil {
 		slog.Error("Error while getting daily blacklist")
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(400, gin.H{"error": err})
 		return
 	}
 
@@ -203,7 +203,7 @@ func (h *HandlerStruct) GetWeekly(c *gin.Context) {
 	resp, err := h.Clients.BlacklistClient.MonitoringWeeklyReport(context.Background(), &pb.Void{})
 	if err != nil {
 		slog.Error("Error while getting daily blacklist")
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(400, gin.H{"error": err})
 		return
 	}
 
@@ -241,7 +241,7 @@ func (h *HandlerStruct) GetMonthly(c *gin.Context) {
 	resp, err := h.Clients.BlacklistClient.MonitoringMonthlyReport(context.Background(), &pb.Void{})
 	if err != nil {
 		slog.Error("Error while getting daily blacklist")
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(400, gin.H{"error": err})
 		return
 	}
 
