@@ -208,7 +208,7 @@ func (h *HandlerStruct) GetWeekly(c *gin.Context) {
 
 	resp, err := h.Clients.BlacklistClient.MonitoringWeeklyReport(context.Background(), &pb.Void{})
 	if err != nil {
-		slog.Error("Error while getting daily blacklist")
+		slog.Error("Error while getting daily blacklist", err)
 		c.JSON(400, gin.H{"error": err})
 		return
 	}
