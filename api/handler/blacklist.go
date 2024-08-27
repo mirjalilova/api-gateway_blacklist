@@ -7,7 +7,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 	pb "github.com/mirjalilova/api-gateway_blacklist/internal/genproto/black_list"
+	"github.com/mirjalilova/api-gateway_blacklist/pkg/helper"
 	rd "github.com/mirjalilova/api-gateway_blacklist/pkg/helper"
+	"google.golang.org/protobuf/proto"
 )
 
 // @Summary 			Add employee to black list
@@ -134,7 +136,7 @@ func (h *HandlerStruct) RemoveEmployee(c *gin.Context) {
 
 	// Clear relevant cache keys
 	h.Redis.Del(c, "daily:", "weekly:", "monthly:")
-	
+
 	slog.Info("Removed employee successfully from blacklist")
 	c.JSON(200, "Removed employee successfully from blacklist")
 }
@@ -152,34 +154,34 @@ func (h *HandlerStruct) RemoveEmployee(c *gin.Context) {
 // @Router              /blacklist/daily [GET]
 func (h *HandlerStruct) GetDaily(c *gin.Context) {
 	cacheKey := "daily:"
-
 	res := pb.Reports{}
 
-	slog.Info("ssssssssssssssss")
+	err := helper.GetCachedData(c, h.Redis, cacheKey, &res)
+	if err != nil {
+		slog.Error("Error retrieving data from cache: ", err)
+		c.JSON(500, gin.H{"error": "Internal Server Error"})
+		return
+	}
 
-	err := rd.GetCachedData(c, h.Redis, cacheKey, &res)
-	slog.Info("ssssssssssssssssssssssss, err:", err)
-	if err == nil {
-		slog.Info("Weekly data retrieved from cache")
+	// Check if the response is empty by comparing it with a zero value using proto.Equal
+	if !proto.Equal(&res, &pb.Reports{}) {
+		slog.Info("Daily data retrieved from cache")
 		c.JSON(200, res)
 		return
 	}
 
 	resp, err := h.Clients.BlacklistClient.MonitoringDailyReport(context.Background(), &pb.Void{})
-	slog.Info("ssssssssssssssssssssssss, err:", err)
 	if err != nil {
-		slog.Error("Error while getting daily blacklist")
+		slog.Error("Error while getting daily blacklist: ", err)
 		c.JSON(400, gin.H{"error": err})
 		return
 	}
 
-	slog.Info("ssssssssssssssssssssssss, resp:", resp)
 	res = *resp
-	slog.Info("ssssssssssssssssssssssss, res:", res)
-
-	rd.CacheData(c, h.Redis, cacheKey, res)
-	slog.Info("ssssssssssssssssssssssss, res:", res)
-	
+	err = helper.CacheData(c, h.Redis, cacheKey, res)
+	if err != nil {
+		slog.Error("Error caching data: ", err)
+	}
 
 	slog.Info("Daily blacklist retrieved successfully")
 	c.JSON(200, res)

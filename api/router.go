@@ -1,6 +1,8 @@
 package api
 
 import (
+	"net/http"
+
 	"github.com/mirjalilova/api-gateway_blacklist/api/handler"
 	middlerware "github.com/mirjalilova/api-gateway_blacklist/api/middleware"
 	_ "github.com/mirjalilova/api-gateway_blacklist/docs"
@@ -82,17 +84,16 @@ func NewGin(h *handler.HandlerStruct) *gin.Engine {
 }
 
 func CORSMiddleware() gin.HandlerFunc {
-    return func(c *gin.Context) {
-        c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
-        c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-        c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
-        c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 
-        if c.Request.Method == "OPTIONS" {
-            c.AbortWithStatus(204)
-            return
-        }
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(http.StatusOK)
+			return
+		}
 
-        c.Next()
-    }
+		c.Next()
+	}
 }
