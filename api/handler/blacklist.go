@@ -155,7 +155,10 @@ func (h *HandlerStruct) GetDaily(c *gin.Context) {
 
 	res := pb.Reports{}
 
+	slog.Info("ssssssssssssssss")
+
 	err := rd.GetCachedData(c, h.Redis, cacheKey, &res)
+	slog.Info("ssssssssssssssssssssssss, err:", err)
 	if err == nil {
 		slog.Info("Weekly data retrieved from cache")
 		c.JSON(200, res)
@@ -163,15 +166,19 @@ func (h *HandlerStruct) GetDaily(c *gin.Context) {
 	}
 
 	resp, err := h.Clients.BlacklistClient.MonitoringDailyReport(context.Background(), &pb.Void{})
+	slog.Info("ssssssssssssssssssssssss, err:", err)
 	if err != nil {
 		slog.Error("Error while getting daily blacklist")
 		c.JSON(400, gin.H{"error": err})
 		return
 	}
 
+	slog.Info("ssssssssssssssssssssssss, resp:", resp)
 	res = *resp
+	slog.Info("ssssssssssssssssssssssss, res:", res)
 
 	rd.CacheData(c, h.Redis, cacheKey, res)
+	slog.Info("ssssssssssssssssssssssss, res:", res)
 
 	slog.Info("Daily blacklist retrieved successfully")
 	c.JSON(200, res)
