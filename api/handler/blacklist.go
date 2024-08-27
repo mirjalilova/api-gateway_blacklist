@@ -179,6 +179,7 @@ func (h *HandlerStruct) GetDaily(c *gin.Context) {
 
 	rd.CacheData(c, h.Redis, cacheKey, res)
 	slog.Info("ssssssssssssssssssssssss, res:", res)
+	
 
 	slog.Info("Daily blacklist retrieved successfully")
 	c.JSON(200, res)
