@@ -7,7 +7,6 @@ import (
 
 	"github.com/gin-gonic/gin"
 	pb "github.com/mirjalilova/api-gateway_blacklist/internal/genproto/black_list"
-	rd "github.com/mirjalilova/api-gateway_blacklist/pkg/helper"
 )
 
 // @Summary 			Add employee to black list
@@ -134,7 +133,7 @@ func (h *HandlerStruct) RemoveEmployee(c *gin.Context) {
 
 	// Clear relevant cache keys
 	h.Redis.Del(c, "daily:", "weekly:", "monthly:")
-	
+
 	slog.Info("Removed employee successfully from blacklist")
 	c.JSON(200, "Removed employee successfully from blacklist")
 }
@@ -179,7 +178,6 @@ func (h *HandlerStruct) GetDaily(c *gin.Context) {
 
 	// rd.CacheData(c, h.Redis, cacheKey, res)
 	// slog.Info("ssssssssssssssssssssssss, res:", res)
-	
 
 	slog.Info("Daily blacklist retrieved successfully")
 	c.JSON(200, resp)
