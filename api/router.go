@@ -36,14 +36,14 @@ func NewGin(h *handler.HandlerStruct) *gin.Engine {
 		slog.Info("Enforcer initialized successfully.")
 	}
 
-	corsConfig := cors.Config{
-		AllowOrigins:     []string{"http://localhost", "http://localhost:8080"},
-		AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
-		AllowHeaders:     []string{"Origin", "Authorization", "Content-Type"},
-		AllowCredentials: true,
-	}
+	// corsConfig := cors.Config{
+	// 	AllowOrigins:     []string{"http://localhost", "http://localhost:8080"},
+	// 	AllowMethods:     []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"},
+	// 	AllowHeaders:     []string{"Origin", "Authorization", "Content-Type"},
+	// 	AllowCredentials: true,
+	// }
 	router.Use(CORSMiddleware())
-	router.Use(cors.New(corsConfig))
+	// router.Use(cors.New(corsConfig))
 
 	// url := ginSwagger.URL("swagger/doc.json")
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
