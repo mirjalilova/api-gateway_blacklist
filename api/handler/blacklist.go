@@ -42,7 +42,7 @@ func (h *HandlerStruct) AddEmployee(c *gin.Context) {
 	}
 
 	// Clear relevant cache keys
-	h.Redis.Del(c, "daily:", "weekly:", "monthly:")
+	// h.Redis.Del(c, "daily:", "weekly:", "monthly:")
 
 	slog.Info("Add employee to blacklist successfully")
 	c.JSON(200, gin.H{"message": "Add employee to blacklist successfully"})
@@ -132,7 +132,7 @@ func (h *HandlerStruct) RemoveEmployee(c *gin.Context) {
 	}
 
 	// Clear relevant cache keys
-	h.Redis.Del(c, "daily:", "weekly:", "monthly:")
+	// h.Redis.Del(c, "daily:", "weekly:", "monthly:")
 
 	slog.Info("Removed employee successfully from blacklist")
 	c.JSON(200, "Removed employee successfully from blacklist")

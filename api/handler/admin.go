@@ -214,7 +214,7 @@ func (h *HandlerStruct) ChangeRole(c *gin.Context) {
 
     if err := c.ShouldBindJSON(&req); err != nil {
         slog.Error("failed to bind JSON: %v", err)
-        c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+        c.JSON(http.StatusBadRequest, gin.H{"error": err})
         return
     }
 
@@ -225,6 +225,6 @@ func (h *HandlerStruct) ChangeRole(c *gin.Context) {
         return
     }
 
-	slog.Info("Employee updated successfully")
-	c.JSON(http.StatusOK, "Employee updated successfully")
+	slog.Info("Role updated successfully")
+	c.JSON(http.StatusOK, "Role updated successfully")
 }

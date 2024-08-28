@@ -9,20 +9,17 @@ import (
 	"google.golang.org/grpc/credentials/insecure"
 )
 
-
 type Clients struct {
 	AdminClient     pb.AdminServiceClient
 	HrClient        pb.HRServiceClient
-	BlacklistClient  pb.BlackListServiceClient
-
+	BlacklistClient pb.BlackListServiceClient
 }
 
 func NewClients(cnf config.Config) *Clients {
-	conn, err := grpc.NewClient("black_list" + cnf.BLACKLIST_PORT, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.NewClient("black_list"+cnf.BLACKLIST_PORT, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		slog.Error("error:", err)
 	}
-
 
 	adminC := pb.NewAdminServiceClient(conn)
 	hrC := pb.NewHRServiceClient(conn)
@@ -30,7 +27,7 @@ func NewClients(cnf config.Config) *Clients {
 
 	return &Clients{
 		AdminClient:     adminC,
-		BlacklistClient:  blacklistC,
+		BlacklistClient: blacklistC,
 		HrClient:        hrC,
 	}
 }

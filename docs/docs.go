@@ -734,8 +734,7 @@ const docTemplate = `{
                         "type": "string",
                         "description": "Employee Id",
                         "name": "employee_id",
-                        "in": "path",
-                        "required": true
+                        "in": "query"
                     },
                     {
                         "description": "Employee",

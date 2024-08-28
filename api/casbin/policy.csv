@@ -23,6 +23,16 @@ p, admin, /admin/approve/:user_id,            POST
 p, admin, /admin/hr_list,                     GET
 p, admin, /admin/delete_hr/:hr_id,            DELETE
 p, admin, /admin/users,                       GET
+
+p, admin, /employee/create,                   POST
+p, admin, /employee/:employee_id,             GET
+p, admin, /employee/all,                      GET
+p, admin, /employee/update/:employee_id,      PUT
+p, admin, /employee/:employee_id,             DELETE
+
+p, admin, /blacklist/daily,                   GET
+p, admin, /blacklist/weekly,                  GET
+p, admin, /blacklist/monthly,                 GET
  
 p, hr, /employee/create,                      POST
 p, hr, /employee/:employee_id,                GET
@@ -44,7 +54,3 @@ p, employee, /blacklist/monthly,              GET
 p, user, /blacklist/daily,                    GET
 p, user, /blacklist/weekly,                   GET
 p, user, /blacklist/monthly,                  GET
-
-p, unauthorized, /blacklist/daily,            GET
-p, unauthorized, /blacklist/weekly,           GET
-p, unauthorized, /blacklist/monthly,          GET

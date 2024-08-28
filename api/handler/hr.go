@@ -143,7 +143,7 @@ func (h *HandlerStruct) GetAllEmployees(c *gin.Context) {
 // @Accept 				json
 // @Produce 			json
 // @Security            BearerAuth
-// @Param  				employee_id  path string true "Employee Id"
+// @Param  				employee_id query string false "Employee Id"
 // @Param  				employee  body black_list.UpdateReqBody true "Employee"
 // @Success 200			{object} string "Employee updated successfully"
 // @Failure 400         {string} Error "Bad Request"

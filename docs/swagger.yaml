@@ -657,9 +657,8 @@ paths:
       description: This api updatedes employee
       parameters:
       - description: Employee Id
-        in: path
+        in: query
         name: employee_id
-        required: true
         type: string
       - description: Employee
         in: body
