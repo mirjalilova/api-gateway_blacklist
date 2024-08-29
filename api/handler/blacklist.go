@@ -144,12 +144,45 @@ func (h *HandlerStruct) RemoveEmployee(c *gin.Context) {
 // @Accept              json
 // @Produce             json
 // @Security            BearerAuth
+// @Param               limit query int false "Limit"
+// @Param               offset query int false "Offset"
 // @Success 200         {object} black_list.Reports
 // @Failure 400         {string} Error "Bad Request"
 // @Failure 404         {string} Error "Not Found"
 // @Failure 500         {string} Error "Internal Server Error"
 // @Router              /blacklist/daily [GET]
 func (h *HandlerStruct) GetDaily(c *gin.Context) {
+	limit := c.Query("limit")
+	offset := c.Query("offset")
+
+	limitValue := 10
+	offsetValue := 0
+
+	if limit != "" {
+		parsedLimit, err := strconv.Atoi(limit)
+		if err != nil {
+			slog.Error("Invalid limit value")
+			c.JSON(400, gin.H{"error": "Invalid limit value"})
+			return
+		}
+		limitValue = parsedLimit
+	}
+
+	if offset != "" {
+		parsedOffset, err := strconv.Atoi(offset)
+		if err != nil {
+			slog.Error("Invalid offset value")
+			c.JSON(400, gin.H{"error": "Invalid offset value"})
+			return
+		}
+		offsetValue = parsedOffset
+	}
+
+	req := &pb.Filter{
+		Limit:  int32(limitValue),
+		Offset: int32(offsetValue),
+	}
+
 	// cacheKey := "daily:"
 
 	// res := pb.Reports{}
@@ -164,8 +197,8 @@ func (h *HandlerStruct) GetDaily(c *gin.Context) {
 	// 	return
 	// }
 
-	resp, err := h.Clients.BlacklistClient.MonitoringDailyReport(context.Background(), &pb.Void{})
-	slog.Info("ssssssssssssssssssssssss, err:", err)
+	resp, err := h.Clients.BlacklistClient.MonitoringDailyReport(context.Background(), req)
+	slog.Info("ssssssssssssssssssssssss, err:", "err", err)
 	if err != nil {
 		slog.Error("Error while getting daily blacklist")
 		c.JSON(400, gin.H{"error": err})
@@ -189,12 +222,45 @@ func (h *HandlerStruct) GetDaily(c *gin.Context) {
 // @Accept              json
 // @Produce             json
 // @Security            BearerAuth
+// @Param               limit query int false "Limit"
+// @Param               offset query int false "Offset"
 // @Success 200         {object} black_list.Reports
 // @Failure 400         {string} Error "Bad Request"
 // @Failure 404         {string} Error "Not Found"
 // @Failure 500         {string} Error "Internal Server Error"
 // @Router              /blacklist/weekly [GET]
 func (h *HandlerStruct) GetWeekly(c *gin.Context) {
+	limit := c.Query("limit")
+	offset := c.Query("offset")
+
+	limitValue := 10
+	offsetValue := 0
+
+	if limit != "" {
+		parsedLimit, err := strconv.Atoi(limit)
+		if err != nil {
+			slog.Error("Invalid limit value")
+			c.JSON(400, gin.H{"error": "Invalid limit value"})
+			return
+		}
+		limitValue = parsedLimit
+	}
+
+	if offset != "" {
+		parsedOffset, err := strconv.Atoi(offset)
+		if err != nil {
+			slog.Error("Invalid offset value")
+			c.JSON(400, gin.H{"error": "Invalid offset value"})
+			return
+		}
+		offsetValue = parsedOffset
+	}
+
+	req := &pb.Filter{
+		Limit:  int32(limitValue),
+		Offset: int32(offsetValue),
+	}
+
 	// cacheKey := "weekly:"
 
 	// res := pb.Reports{}
@@ -206,9 +272,9 @@ func (h *HandlerStruct) GetWeekly(c *gin.Context) {
 	// 	return
 	// }
 
-	resp, err := h.Clients.BlacklistClient.MonitoringWeeklyReport(context.Background(), &pb.Void{})
+	resp, err := h.Clients.BlacklistClient.MonitoringWeeklyReport(context.Background(), req)
 	if err != nil {
-		slog.Error("Error while getting daily blacklist", err)
+		slog.Error("Error while getting daily blacklist", "err", err)
 		c.JSON(400, gin.H{"error": err})
 		return
 	}
@@ -227,12 +293,45 @@ func (h *HandlerStruct) GetWeekly(c *gin.Context) {
 // @Accept              json
 // @Produce             json
 // @Security            BearerAuth
+// @Param               limit query int false "Limit"
+// @Param               offset query int false "Offset"
 // @Success 200         {object} black_list.Reports
 // @Failure 400         {string} Error "Bad Request"
 // @Failure 404         {string} Error "Not Found"
 // @Failure 500         {string} Error "Internal Server Error"
 // @Router              /blacklist/monthly [GET]
 func (h *HandlerStruct) GetMonthly(c *gin.Context) {
+	limit := c.Query("limit")
+	offset := c.Query("offset")
+
+	limitValue := 10
+	offsetValue := 0
+
+	if limit != "" {
+		parsedLimit, err := strconv.Atoi(limit)
+		if err != nil {
+			slog.Error("Invalid limit value")
+			c.JSON(400, gin.H{"error": "Invalid limit value"})
+			return
+		}
+		limitValue = parsedLimit
+	}
+
+	if offset != "" {
+		parsedOffset, err := strconv.Atoi(offset)
+		if err != nil {
+			slog.Error("Invalid offset value")
+			c.JSON(400, gin.H{"error": "Invalid offset value"})
+			return
+		}
+		offsetValue = parsedOffset
+	}
+
+	req := &pb.Filter{
+		Limit:  int32(limitValue),
+		Offset: int32(offsetValue),
+	}
+
 	// cacheKey := "monthly:"
 
 	// res := pb.Reports{}
@@ -244,7 +343,7 @@ func (h *HandlerStruct) GetMonthly(c *gin.Context) {
 	// 	return
 	// }
 
-	resp, err := h.Clients.BlacklistClient.MonitoringMonthlyReport(context.Background(), &pb.Void{})
+	resp, err := h.Clients.BlacklistClient.MonitoringMonthlyReport(context.Background(), req)
 	if err != nil {
 		slog.Error("Error while getting daily blacklist")
 		c.JSON(400, gin.H{"error": err})

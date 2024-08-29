@@ -386,6 +386,15 @@ paths:
       consumes:
       - application/json
       description: Monitoring daily blacklist
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
       produces:
       - application/json
       responses:
@@ -415,6 +424,15 @@ paths:
       consumes:
       - application/json
       description: Monitoring monthly blacklist
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
       produces:
       - application/json
       responses:
@@ -479,6 +497,15 @@ paths:
       consumes:
       - application/json
       description: Monitoring weekly blacklist
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
       produces:
       - application/json
       responses:
