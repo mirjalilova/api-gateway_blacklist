@@ -66,7 +66,7 @@ func (h *HandlerStruct) GetAll(c *gin.Context) {
 	offset := c.Query("offset")
 
 	limitValue := 10
-	offsetValue := 0
+	offsetValue := 1
 
 	if limit != "" {
 		parsedLimit, err := strconv.Atoi(limit)
@@ -156,7 +156,7 @@ func (h *HandlerStruct) GetDaily(c *gin.Context) {
 	offset := c.Query("offset")
 
 	limitValue := 10
-	offsetValue := 0
+	offsetValue := 1
 
 	if limit != "" {
 		parsedLimit, err := strconv.Atoi(limit)
@@ -234,7 +234,7 @@ func (h *HandlerStruct) GetWeekly(c *gin.Context) {
 	offset := c.Query("offset")
 
 	limitValue := 10
-	offsetValue := 0
+	offsetValue := 1
 
 	if limit != "" {
 		parsedLimit, err := strconv.Atoi(limit)
@@ -305,7 +305,7 @@ func (h *HandlerStruct) GetMonthly(c *gin.Context) {
 	offset := c.Query("offset")
 
 	limitValue := 10
-	offsetValue := 0
+	offsetValue := 1
 
 	if limit != "" {
 		parsedLimit, err := strconv.Atoi(limit)

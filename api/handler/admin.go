@@ -59,7 +59,7 @@ func (h *HandlerStruct) ListHR(c *gin.Context) {
 	offset := c.Query("offset")
 
 	limitValue := 10
-	offsetValue := 0
+	offsetValue := 1
 
 	if limit != "" {
 		parsedLimit, err := strconv.Atoi(limit)
@@ -156,7 +156,7 @@ func (h *HandlerStruct) GetAllUsers(c *gin.Context) {
 	fullName := c.Query("full_name")
 
 	limitValue := 10
-	offsetValue := 0
+	offsetValue := 1
 
 	if limit != "" {
 		parsedLimit, err := strconv.Atoi(limit)

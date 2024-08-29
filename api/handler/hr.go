@@ -96,7 +96,7 @@ func (h *HandlerStruct) GetAllEmployees(c *gin.Context) {
 	offset := c.Query("offset")
 
 	limitValue := 10
-	offsetValue := 0
+	offsetValue := 1
 
 	if limit != "" {
 		parsedLimit, err := strconv.Atoi(limit)
