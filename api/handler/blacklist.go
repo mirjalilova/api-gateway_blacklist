@@ -94,15 +94,30 @@ func (h *HandlerStruct) GetAll(c *gin.Context) {
 		Offset: int32(offsetValue),
 	}
 
-	lists, err := h.Clients.BlacklistClient.GetAll(context.Background(), req)
+	cacheKey := "allblacklist:"
+
+	res := pb.GetAllBlackListRes{}
+
+	err := rd.GetCachedData(c, h.Redis, cacheKey, &res)
+	if err == nil {
+		slog.Info("Weekly data retrieved from cache")
+		c.JSON(200, res)
+		return
+	}
+
+	resp, err := h.Clients.BlacklistClient.GetAll(context.Background(), req)
 	if err != nil {
 		slog.Error("Error while getting blacklist")
 		c.JSON(400, gin.H{"error": err})
 		return
 	}
 
+	res = *resp
+
+	rd.CacheData(c, h.Redis, cacheKey, res)
+
 	slog.Info("Employee getting successfully from blacklist")
-	c.JSON(200, lists)
+	c.JSON(200, resp)
 }
 
 // @Summary 			Remove employee from blacklist
@@ -153,6 +168,13 @@ func (h *HandlerStruct) RemoveEmployee(c *gin.Context) {
 // @Failure 500         {string} Error "Internal Server Error"
 // @Router              /blacklist/daily [GET]
 func (h *HandlerStruct) GetDaily(c *gin.Context) {
+
+	if h.Redis == nil {
+		slog.Error("Redis client is not initialized")
+		c.JSON(500, gin.H{"error": "Internal Server Error"})
+		return
+	}
+	
 	limit := c.Query("limit")
 	offset := c.Query("offset")
 
@@ -188,10 +210,7 @@ func (h *HandlerStruct) GetDaily(c *gin.Context) {
 
 	res := pb.Reports{}
 
-	slog.Info("ssssssssssssssss")
-
 	err := rd.GetCachedData(c, h.Redis, cacheKey, &res)
-	slog.Info("ssssssssssssssssssssssss, err:", err)
 	if err == nil {
 		slog.Info("Weekly data retrieved from cache")
 		c.JSON(200, res)
@@ -199,19 +218,15 @@ func (h *HandlerStruct) GetDaily(c *gin.Context) {
 	}
 
 	resp, err := h.Clients.BlacklistClient.MonitoringDailyReport(context.Background(), req)
-	slog.Info("ssssssssssssssssssssssss, err:", "err", err)
 	if err != nil {
 		slog.Error("Error while getting daily blacklist")
 		c.JSON(400, gin.H{"error": err})
 		return
 	}
 
-	slog.Info("ssssssssssssssssssssssss, resp:", resp)
 	res = *resp
-	slog.Info("ssssssssssssssssssssssss, res:", res)
 
 	rd.CacheData(c, h.Redis, cacheKey, res)
-	slog.Info("ssssssssssssssssssssssss, res:", res)
 
 	slog.Info("Daily blacklist retrieved successfully")
 	c.JSON(200, resp)

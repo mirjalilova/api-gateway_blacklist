@@ -49,9 +49,9 @@ func GetRole(r *http.Request) (string, error) {
 		return "unauthorized", nil
 	}
 
-	if !strings.HasPrefix(jwtToken, "Bearer ") {
-		return "unauthorized", errors.New("invalid authorization header format")
-	}
+	// if !strings.HasPrefix(jwtToken, "Bearer ") {
+	// 	return "unauthorized", errors.New("invalid authorization header format")
+	// }
 
 	tokenString := strings.TrimPrefix(jwtToken, "Bearer ")
 
@@ -78,7 +78,7 @@ func CheckPermission(path string, r *http.Request, enforcer *casbin.Enforcer) (b
 	}
 	method := r.Method
 
-	slog.Info("Checking permission for role: ", role, " path: ", path, " method:", method)
+	// slog.Info("Checking permission for role: ", role, " path: ", path, " method:", method)
 
 	allowed, err := enforcer.Enforce(role, path, method)
 	if err != nil {
@@ -96,9 +96,9 @@ func GetUserId(r *http.Request) (string, error) {
 		return "unauthorized", nil
 	}
 
-	if !strings.HasPrefix(jwtToken, "Bearer ") {
-		return "unauthorized", errors.New("invalid authorization header format")
-	}
+	// if !strings.HasPrefix(jwtToken, "Bearer ") {
+	// 	return "unauthorized", errors.New("invalid authorization header format")
+	// }
 
 	tokenString := strings.TrimPrefix(jwtToken, "Bearer ")
 

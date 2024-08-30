@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	md "github.com/mirjalilova/api-gateway_blacklist/api/middleware"
 	pb "github.com/mirjalilova/api-gateway_blacklist/internal/genproto/black_list"
+	rd "github.com/mirjalilova/api-gateway_blacklist/pkg/helper"
 	"golang.org/x/exp/slog"
 )
 
@@ -37,6 +38,9 @@ func (h *HandlerStruct) Approve(c *gin.Context) {
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
+
+	// Clear relevant cache keys
+	h.Redis.Del(c, "allhr:")
 
 	slog.Error("HR approved successfully")
 	c.JSON(200, gin.H{"message": "HR approved successfully"})
@@ -86,15 +90,30 @@ func (h *HandlerStruct) ListHR(c *gin.Context) {
 		Offset: int32(offsetValue),
 	}
 
-	admins, err := h.Clients.AdminClient.ListHR(context.Background(), req)
+	cacheKey := "allhr:"
+
+	res := pb.GetAllHRRes{}
+
+	err := rd.GetCachedData(c, h.Redis, cacheKey, &res)
+	if err == nil {
+		slog.Info("Weekly data retrieved from cache")
+		c.JSON(200, res)
+		return
+	}
+
+	resp, err := h.Clients.AdminClient.ListHR(context.Background(), req)
 	if err != nil {
 		slog.Error("Error getting HR list: ", err)
 		c.JSON(400, gin.H{"error": err.Error()})
 		return
 	}
 
+	res = *resp
+
+	rd.CacheData(c, h.Redis, cacheKey, res)
+
 	slog.Info("HR list retrieved successfully")
-	c.JSON(200, admins)
+	c.JSON(200, resp)
 }
 
 // @Summary			 Delete HR
@@ -121,6 +140,9 @@ func (h *HandlerStruct) DeleteHR(c *gin.Context) {
 		return
 	}
 
+	// Clear relevant cache keys
+	h.Redis.Del(c, "allhr:")
+
 	slog.Info("HR deleted successfully")
 	c.JSON(200, "HR deleted successfully")
 }
@@ -133,7 +155,6 @@ func getuserId(ctx *gin.Context) string {
 	}
 	return user_id
 }
-
 
 // @Summary 		Get all users
 // @Description     Get all users
@@ -210,20 +231,20 @@ func (h *HandlerStruct) GetAllUsers(c *gin.Context) {
 // @Failure 500         {string} Error "Internal Server Error"
 // @Router 				/admin/change_role [PUT]
 func (h *HandlerStruct) ChangeRole(c *gin.Context) {
-    var req pb.ChangeRoleReq
+	var req pb.ChangeRoleReq
 
-    if err := c.ShouldBindJSON(&req); err != nil {
-        slog.Error("failed to bind JSON: %v", err)
-        c.JSON(http.StatusBadRequest, gin.H{"error": err})
-        return
-    }
+	if err := c.ShouldBindJSON(&req); err != nil {
+		slog.Error("failed to bind JSON: %v", err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": err})
+		return
+	}
 
-    _, err := h.Clients.AdminClient.ChangeRole(context.Background(), &req)
+	_, err := h.Clients.AdminClient.ChangeRole(context.Background(), &req)
 	if err != nil {
-        slog.Error("failed to update user: %v", err)
-        c.JSON(http.StatusInternalServerError, gin.H{"error": err})
-        return
-    }
+		slog.Error("failed to update user: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+		return
+	}
 
 	slog.Info("Role updated successfully")
 	c.JSON(http.StatusOK, "Role updated successfully")

@@ -14,5 +14,6 @@ type HandlerStruct struct {
 func NewHandlerStruct(cnf *config.Config, rd *redis.Client) *HandlerStruct {
 	return &HandlerStruct{
 		Clients: *clients.NewClients(*cnf),
+		Redis: rd,
 	}
 }
