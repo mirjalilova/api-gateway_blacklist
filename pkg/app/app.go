@@ -1,6 +1,8 @@
 package app
 
 import (
+	"context"
+
 	"github.com/go-redis/redis/v8"
 	"github.com/mirjalilova/api-gateway_blacklist/api"
 	"github.com/mirjalilova/api-gateway_blacklist/api/handler"
@@ -21,10 +23,14 @@ func Run(cfg *config.Config) {
 
 	// Redis
 	rd := redis.NewClient(&redis.Options{
-		Addr:     "redis:6379",
+		Addr:     "redis_blacklist:6379",
 		Password: "",
 		DB:       0,
 	})
+	if err := rd.Ping(context.Background()).Err(); err != nil {
+		slog.Error("Failed to connect to Redis: %v", err)
+		return
+	}
 
 	h := handler.NewHandlerStruct(cfg, rd)
 

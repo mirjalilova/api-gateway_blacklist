@@ -48,7 +48,14 @@ func GetRole(r *http.Request) (string, error) {
 	} else if strings.Contains(jwtToken, "Basic") {
 		return "unauthorized", nil
 	}
-	claims, err = token.ExtractClaims(jwtToken, key)
+
+	if !strings.HasPrefix(jwtToken, "Bearer ") {
+		return "unauthorized", errors.New("invalid authorization header format")
+	}
+
+	tokenString := strings.TrimPrefix(jwtToken, "Bearer ")
+
+	claims, err = token.ExtractClaims(tokenString, key)
 
 	if err != nil {
 		slog.Error("Error while extracting claims: ", err)
@@ -89,7 +96,13 @@ func GetUserId(r *http.Request) (string, error) {
 		return "unauthorized", nil
 	}
 
-	claims, err := token.ExtractClaims(jwtToken, key)
+	if !strings.HasPrefix(jwtToken, "Bearer ") {
+		return "unauthorized", errors.New("invalid authorization header format")
+	}
+
+	tokenString := strings.TrimPrefix(jwtToken, "Bearer ")
+
+	claims, err := token.ExtractClaims(tokenString, key)
 	if err != nil {
 		slog.Error("Error while extracting claims: ", err)
 		return "unauthorized", err
