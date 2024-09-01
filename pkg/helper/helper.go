@@ -8,7 +8,7 @@ import (
 	"github.com/go-redis/redis/v8"
 )
 
-var cacheExpiration = 15 * time.Microsecond // Updated to a more reasonable cache expiration
+var cacheExpiration = 15 * time.Minute // Updated to a more reasonable cache expiration
 
 // CacheData caches the data in Redis
 func CacheData(ctx context.Context, client *redis.Client, key string, data interface{}) error {
