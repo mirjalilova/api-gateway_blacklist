@@ -986,6 +986,9 @@ const docTemplate = `{
                 "id": {
                     "type": "string"
                 },
+                "is_blocked": {
+                    "type": "string"
+                },
                 "position": {
                     "type": "string"
                 }
