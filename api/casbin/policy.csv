@@ -14,7 +14,7 @@ p, superadmin, /employee/:employee_id,        DELETE
 
 p, superadmin, /blacklist/add,                POST
 p, superadmin, /blacklist/all,                GET
-p, superadmin, /blacklist/:employee_id,       DELETE
+p, superadmin, /blacklist/remove/:employee_id,DELETE
 p, superadmin, /blacklist/daily,              GET
 p, superadmin, /blacklist/weekly,             GET
 p, superadmin, /blacklist/monthly,            GET
@@ -42,7 +42,7 @@ p, hr, /employee/:employee_id,                DELETE
 
 p, hr, /blacklist/add,                        POST
 p, hr, /blacklist/all,                        GET
-p, hr, /blacklist/:employee_id,               DELETE
+p, hr, /blacklist/remove/:employee_id,        DELETE
 p, hr, /blacklist/daily,                      GET
 p, hr, /blacklist/weekly,                     GET
 p, hr, /blacklist/monthly,                    GET
