@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/mirjalilova/api-gateway_blacklist/api/handler"
-	middlerware "github.com/mirjalilova/api-gateway_blacklist/api/middleware"
+	// middlerware "github.com/mirjalilova/api-gateway_blacklist/api/middleware"
 	_ "github.com/mirjalilova/api-gateway_blacklist/docs"
 	"golang.org/x/exp/slog"
 
@@ -50,7 +50,7 @@ func NewGin(h *handler.HandlerStruct) *gin.Engine {
 	allowed, err := enforcer.Enforce("admin", "/admin/hr_list", "GET")
 	slog.Info("Permission allowed: %v, Error: %v", allowed, err)
 
-	admin := router.Group("/admin").Use(middlerware.NewAuth(enforcer))
+	admin := router.Group("/admin")//.Use(middlerware.NewAuth(enforcer))
 	{
 		admin.POST("/approve/:user_id", h.Approve)
 		admin.GET("/hr_list", h.ListHR)
@@ -59,7 +59,7 @@ func NewGin(h *handler.HandlerStruct) *gin.Engine {
 		admin.PUT("/change_role", h.ChangeRole)
 	}
 
-	hr := router.Group("/employee").Use(middlerware.NewAuth(enforcer))
+	hr := router.Group("/employee")//.Use(middlerware.NewAuth(enforcer))
 	{
 		hr.POST("/create", h.CreateEmployee)
 		hr.GET("/:employee_id", h.GetEmployee)
@@ -68,7 +68,7 @@ func NewGin(h *handler.HandlerStruct) *gin.Engine {
 		hr.DELETE("/:employee_id", h.DeleteEmployee)
 	}
 
-	bk := router.Group("/blacklist").Use(middlerware.NewAuth(enforcer))
+	bk := router.Group("/blacklist")//.Use(middlerware.NewAuth(enforcer))
 	{
 		bk.POST("/add", h.AddEmployee)
 		bk.GET("/all", h.GetAll)
