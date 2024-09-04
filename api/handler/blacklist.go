@@ -25,8 +25,8 @@ import (
 func (h *HandlerStruct) AddEmployee(c *gin.Context) {
 	var body pb.BlackListBody
 	if err := c.ShouldBindJSON(&body); err != nil {
-		slog.Error("Failed to bind JSON")
-		c.JSON(400, gin.H{"error": err.Error()})
+		slog.Error("Failed to bind JSON", err)
+		c.JSON(400, gin.H{"error": err})
 		return
 	}
 
@@ -37,8 +37,8 @@ func (h *HandlerStruct) AddEmployee(c *gin.Context) {
 	}
 	_, err := h.Clients.BlacklistClient.Add(context.Background(), req)
 	if err != nil {
-		slog.Error("Error while adding employee to blacklist")
-		c.JSON(400, gin.H{"error": err.Error()})
+		slog.Error("Error while adding employee to blacklist", err)
+		c.JSON(400, gin.H{"error": err})
 		return
 	}
 
@@ -82,7 +82,7 @@ func (h *HandlerStruct) GetAll(c *gin.Context) {
 	if offset != "" {
 		parsedOffset, err := strconv.Atoi(offset)
 		if err != nil {
-			slog.Error("Invalid offset value")
+			slog.Error("Invalid offset value", err)
 			c.JSON(400, gin.H{"error": "Invalid offset value"})
 			return
 		}
@@ -107,7 +107,7 @@ func (h *HandlerStruct) GetAll(c *gin.Context) {
 
 	resp, err := h.Clients.BlacklistClient.GetAll(context.Background(), req)
 	if err != nil {
-		slog.Error("Error while getting blacklist")
+		slog.Error("Error while getting blacklist", err)
 		c.JSON(400, gin.H{"error": err})
 		return
 	}
@@ -142,7 +142,7 @@ func (h *HandlerStruct) RemoveEmployee(c *gin.Context) {
 
 	_, err := h.Clients.BlacklistClient.Remove(context.Background(), req)
 	if err != nil {
-		slog.Error("Error while remove employee from blacklist")
+		slog.Error("Error while remove employee from blacklist", err)
 		c.JSON(400, gin.H{"error": err})
 		return
 	}
@@ -174,7 +174,7 @@ func (h *HandlerStruct) GetDaily(c *gin.Context) {
 		c.JSON(500, gin.H{"error": "Internal Server Error"})
 		return
 	}
-	
+
 	limit := c.Query("limit")
 	offset := c.Query("offset")
 
@@ -219,7 +219,7 @@ func (h *HandlerStruct) GetDaily(c *gin.Context) {
 
 	resp, err := h.Clients.BlacklistClient.MonitoringDailyReport(context.Background(), req)
 	if err != nil {
-		slog.Error("Error while getting daily blacklist")
+		slog.Error("Error while getting daily blacklist", err)
 		c.JSON(400, gin.H{"error": err})
 		return
 	}
@@ -361,7 +361,7 @@ func (h *HandlerStruct) GetMonthly(c *gin.Context) {
 
 	resp, err := h.Clients.BlacklistClient.MonitoringMonthlyReport(context.Background(), req)
 	if err != nil {
-		slog.Error("Error while getting daily blacklist")
+		slog.Error("Error while getting daily blacklist", err)
 		c.JSON(400, gin.H{"error": err})
 		return
 	}
@@ -389,42 +389,42 @@ func (h *HandlerStruct) GetMonthly(c *gin.Context) {
 // @Router              /blacklist/logs [GET]
 func (h *HandlerStruct) ViewLogs(c *gin.Context) {
 	limit := c.Query("limit")
-    offset := c.Query("offset")
+	offset := c.Query("offset")
 
-    limitValue := 10
-    offsetValue := 1
+	limitValue := 10
+	offsetValue := 1
 
-    if limit!= "" {
-        parsedLimit, err := strconv.Atoi(limit)
-        if err!= nil {
-            slog.Error("Invalid limit value")
-            c.JSON(400, gin.H{"error": "Invalid limit value"})
-            return
-        }
-        limitValue = parsedLimit
-    }
+	if limit != "" {
+		parsedLimit, err := strconv.Atoi(limit)
+		if err != nil {
+			slog.Error("Invalid limit value")
+			c.JSON(400, gin.H{"error": "Invalid limit value"})
+			return
+		}
+		limitValue = parsedLimit
+	}
 
-    if offset!= "" {
-        parsedOffset, err := strconv.Atoi(offset)
-        if err!= nil {
-            slog.Error("Invalid offset value")
-            c.JSON(400, gin.H{"error": "Invalid offset value"})
-            return
-        }
-        offsetValue = parsedOffset
-    }
+	if offset != "" {
+		parsedOffset, err := strconv.Atoi(offset)
+		if err != nil {
+			slog.Error("Invalid offset value")
+			c.JSON(400, gin.H{"error": "Invalid offset value"})
+			return
+		}
+		offsetValue = parsedOffset
+	}
 
-    req := &pb.Filter{
-        Limit: int32(limitValue),
+	req := &pb.Filter{
+		Limit:  int32(limitValue),
 		Offset: int32(offsetValue),
 	}
 
 	resp, err := h.Clients.BlacklistClient.ViewLogs(context.Background(), req)
-	if err!= nil {
-        slog.Error("Error while getting logs")
-        c.JSON(400, gin.H{"error": err})
-        return
-    }
+	if err != nil {
+		slog.Error("Error while getting logs", err)
+		c.JSON(400, gin.H{"error": err})
+		return
+	}
 	slog.Info("Logs retrieved successfully")
 	c.JSON(200, resp)
 }

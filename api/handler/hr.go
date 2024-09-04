@@ -26,7 +26,7 @@ func (h *HandlerStruct) CreateEmployee(c *gin.Context) {
 
 	if err := c.ShouldBindJSON(&body); err != nil {
 		slog.Error("Failed to bind JSON: ", err)
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(400, gin.H{"error": err})
 		return
 	}
 
@@ -38,7 +38,7 @@ func (h *HandlerStruct) CreateEmployee(c *gin.Context) {
 	_, err := h.Clients.HrClient.Create(context.Background(), req)
 	if err != nil {
 		slog.Error("Error while create employee: ", err)
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(400, gin.H{"error": err})
 		return
 	}
 
@@ -68,7 +68,7 @@ func (h *HandlerStruct) GetEmployee(c *gin.Context) {
 	employee, err := h.Clients.HrClient.Get(context.Background(), req)
 	if err != nil {
 		slog.Error("Error while getting employee: ", err)
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(400, gin.H{"error": err})
 		return
 	}
 
@@ -129,7 +129,7 @@ func (h *HandlerStruct) GetAllEmployees(c *gin.Context) {
 	employees, err := h.Clients.HrClient.GetAll(context.Background(), req)
 	if err != nil {
 		slog.Error("Error while getting employees")
-		c.JSON(500, gin.H{"error": err.Error()})
+		c.JSON(500, gin.H{"error": err})
 		return
 	}
 
@@ -169,7 +169,7 @@ func (h *HandlerStruct) UpdateEmployee(c *gin.Context) {
 	_, err := h.Clients.HrClient.Update(context.Background(), req)
 	if err != nil {
 		slog.Error("Error while updating employee")
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(400, gin.H{"error": err})
 		return
 	}
 

@@ -35,7 +35,7 @@ func (h *HandlerStruct) Approve(c *gin.Context) {
 
 	if err != nil {
 		slog.Error("Error approving HR: ", err)
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(400, gin.H{"error": err})
 		return
 	}
 
@@ -104,7 +104,7 @@ func (h *HandlerStruct) ListHR(c *gin.Context) {
 	resp, err := h.Clients.AdminClient.ListHR(context.Background(), req)
 	if err != nil {
 		slog.Error("Error getting HR list: ", err)
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(400, gin.H{"error": err})
 		return
 	}
 
@@ -136,7 +136,7 @@ func (h *HandlerStruct) DeleteHR(c *gin.Context) {
 	_, err := h.Clients.AdminClient.Delete(context.Background(), req)
 	if err != nil {
 		slog.Error("Error deleting Genetic Data: ", err)
-		c.JSON(400, gin.H{"error": err.Error()})
+		c.JSON(400, gin.H{"error": err})
 		return
 	}
 
@@ -150,7 +150,7 @@ func (h *HandlerStruct) DeleteHR(c *gin.Context) {
 func getuserId(ctx *gin.Context) string {
 	user_id, err := md.GetUserId(ctx.Request)
 	if err != nil {
-		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err})
 		return ""
 	}
 	return user_id
