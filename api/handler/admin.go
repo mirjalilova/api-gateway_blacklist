@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	md "github.com/mirjalilova/api-gateway_blacklist/api/middleware"
 	pb "github.com/mirjalilova/api-gateway_blacklist/internal/genproto/black_list"
+
 	// rd "github.com/mirjalilova/api-gateway_blacklist/pkg/helper"
 	"golang.org/x/exp/slog"
 )
@@ -44,6 +45,35 @@ func (h *HandlerStruct) Approve(c *gin.Context) {
 
 	slog.Error("HR approved successfully")
 	c.JSON(200, gin.H{"message": "HR approved successfully"})
+}
+
+// @Summary 		Get hr
+// @Description     Get hr
+// @Tags       	    Admin
+// @Accept 			json
+// @Produce 		json
+// @Security 		BearerAuth
+// @Param           hr_id query string true "HR Id"
+// @Success 200 {object} black_list.Hr
+// @Failure 400 {object} string "Bad Request"
+// @Failure 500 {object} string "Internal Server Error"
+// @Router /hr/{hr_id} [get]
+func (h *HandlerStruct) GetHR(c *gin.Context) {
+	userId := c.Query("hr_id")
+
+	req := &pb.GetById{
+        Id: userId,
+    }
+
+	res, err := h.Clients.AdminClient.GetHRById(context.Background(), req)
+	if err!= nil {
+        slog.Error("failed to get hr: %v", err)
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+        return
+    }
+
+	slog.Info("HR retrieved successfully")
+	c.JSON(http.StatusOK, res)
 }
 
 // @Summary 		Get hr list
@@ -248,4 +278,33 @@ func (h *HandlerStruct) ChangeRole(c *gin.Context) {
 
 	slog.Info("Role updated successfully")
 	c.JSON(http.StatusOK, "Role updated successfully")
+}
+
+// @Summary 		Get user
+// @Description     Get user
+// @Tags       	    Admin
+// @Accept 			json
+// @Produce 		json
+// @Security 		BearerAuth
+// @Param           user_id query string true "User Id"
+// @Success 200 {object} black_list.UserRes
+// @Failure 400 {object} string "Bad Request"
+// @Failure 500 {object} string "Internal Server Error"
+// @Router /user/{user_id} [get]
+func (h *HandlerStruct) GetUser(c *gin.Context) {
+	userId := c.Query("user_id")
+
+	req := &pb.GetById{
+        Id: userId,
+    }
+
+	res, err := h.Clients.AdminClient.GetUserById(context.Background(), req)
+	if err!= nil {
+        slog.Error("failed to get user: %v", err)
+        c.JSON(http.StatusInternalServerError, gin.H{"error": err})
+        return
+    }
+
+	slog.Info("User retrieved successfully")
+	c.JSON(http.StatusOK, res)
 }

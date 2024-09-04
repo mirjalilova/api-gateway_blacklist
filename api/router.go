@@ -57,6 +57,8 @@ func NewGin(h *handler.HandlerStruct) *gin.Engine {
 		admin.DELETE("/delete_hr/:hr_id", h.DeleteHR)
 		admin.GET("/users", h.GetAllUsers)
 		admin.PUT("/change_role", h.ChangeRole)
+		admin.GET("/user/:user_id", h.GetUser)
+		admin.GET("/hr/:hr_id", h.GetHR)
 	}
 
 	hr := router.Group("/employee")//.Use(middlerware.NewAuth(enforcer))
