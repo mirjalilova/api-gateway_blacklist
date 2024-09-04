@@ -8,7 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	md "github.com/mirjalilova/api-gateway_blacklist/api/middleware"
 	pb "github.com/mirjalilova/api-gateway_blacklist/internal/genproto/black_list"
-	rd "github.com/mirjalilova/api-gateway_blacklist/pkg/helper"
+	// rd "github.com/mirjalilova/api-gateway_blacklist/pkg/helper"
 	"golang.org/x/exp/slog"
 )
 
@@ -40,7 +40,7 @@ func (h *HandlerStruct) Approve(c *gin.Context) {
 	}
 
 	// Clear relevant cache keys
-	h.Redis.Del(c, "allhr:")
+	// h.Redis.Del(c, "allhr:")
 
 	slog.Error("HR approved successfully")
 	c.JSON(200, gin.H{"message": "HR approved successfully"})
@@ -90,16 +90,16 @@ func (h *HandlerStruct) ListHR(c *gin.Context) {
 		Offset: int32(offsetValue),
 	}
 
-	cacheKey := "allhr:"
+	// cacheKey := "allhr:"
 
-	res := pb.GetAllHRRes{}
+	// res := pb.GetAllHRRes{}
 
-	err := rd.GetCachedData(c, h.Redis, cacheKey, &res)
-	if err == nil {
-		slog.Info("Weekly data retrieved from cache")
-		c.JSON(200, res)
-		return
-	}
+	// err := rd.GetCachedData(c, h.Redis, cacheKey, &res)
+	// if err == nil {
+	// 	slog.Info("Weekly data retrieved from cache")
+	// 	c.JSON(200, res)
+	// 	return
+	// }
 
 	resp, err := h.Clients.AdminClient.ListHR(context.Background(), req)
 	if err != nil {
@@ -108,9 +108,9 @@ func (h *HandlerStruct) ListHR(c *gin.Context) {
 		return
 	}
 
-	res = *resp
+	// res = *resp
 
-	rd.CacheData(c, h.Redis, cacheKey, res)
+	// rd.CacheData(c, h.Redis, cacheKey, res)
 
 	slog.Info("HR list retrieved successfully")
 	c.JSON(200, resp)
@@ -141,7 +141,7 @@ func (h *HandlerStruct) DeleteHR(c *gin.Context) {
 	}
 
 	// Clear relevant cache keys
-	h.Redis.Del(c, "allhr:")
+	// h.Redis.Del(c, "allhr:")
 
 	slog.Info("HR deleted successfully")
 	c.JSON(200, "HR deleted successfully")
