@@ -235,6 +235,37 @@ paths:
       summary: Delete HR
       tags:
       - Admin
+  /admin/hr/{hr_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get hr
+      parameters:
+      - description: HR Id
+        in: query
+        name: hr_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/black_list.Hr'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get hr
+      tags:
+      - Admin
   /admin/hr_list:
     get:
       consumes:
@@ -267,6 +298,37 @@ paths:
       security:
       - BearerAuth: []
       summary: Get hr list
+      tags:
+      - Admin
+  /admin/user/{user_id}:
+    get:
+      consumes:
+      - application/json
+      description: Get user
+      parameters:
+      - description: User Id
+        in: query
+        name: user_id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/black_list.UserRes'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: Get user
       tags:
       - Admin
   /admin/users:
@@ -759,68 +821,6 @@ paths:
       summary: UPDATES EMPLOYEE
       tags:
       - Employee
-  /hr/{hr_id}:
-    get:
-      consumes:
-      - application/json
-      description: Get hr
-      parameters:
-      - description: HR Id
-        in: query
-        name: hr_id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/black_list.Hr'
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      security:
-      - BearerAuth: []
-      summary: Get hr
-      tags:
-      - Admin
-  /user/{user_id}:
-    get:
-      consumes:
-      - application/json
-      description: Get user
-      parameters:
-      - description: User Id
-        in: query
-        name: user_id
-        required: true
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/black_list.UserRes'
-        "400":
-          description: Bad Request
-          schema:
-            type: string
-        "500":
-          description: Internal Server Error
-          schema:
-            type: string
-      security:
-      - BearerAuth: []
-      summary: Get user
-      tags:
-      - Admin
 securityDefinitions:
   BearerAuth:
     in: header
