@@ -57,7 +57,7 @@ func (h *HandlerStruct) Approve(c *gin.Context) {
 // @Success 200 {object} black_list.Hr
 // @Failure 400 {object} string "Bad Request"
 // @Failure 500 {object} string "Internal Server Error"
-// @Router /hr/{hr_id} [get]
+// @Router /admin/hr/{hr_id} [get]
 func (h *HandlerStruct) GetHR(c *gin.Context) {
 	userId := c.Query("hr_id")
 
@@ -290,7 +290,7 @@ func (h *HandlerStruct) ChangeRole(c *gin.Context) {
 // @Success 200 {object} black_list.UserRes
 // @Failure 400 {object} string "Bad Request"
 // @Failure 500 {object} string "Internal Server Error"
-// @Router /user/{user_id} [get]
+// @Router /admin/user/{user_id} [get]
 func (h *HandlerStruct) GetUser(c *gin.Context) {
 	userId := c.Query("user_id")
 
