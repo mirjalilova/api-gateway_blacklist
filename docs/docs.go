@@ -371,7 +371,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/black_list.GetAllBlackListRes"
+                            "$ref": "#/definitions/black_list.Reports"
                         }
                     },
                     "400": {
@@ -432,6 +432,66 @@ const docTemplate = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/black_list.Reports"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/blacklist/logs": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "View logs on blacklist",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Logs"
+                ],
+                "summary": "View logs on blacklist",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "Limit",
+                        "name": "limit",
+                        "in": "query"
+                    },
+                    {
+                        "type": "integer",
+                        "description": "Offset",
+                        "name": "offset",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/black_list.Logs"
                         }
                     },
                     "400": {
@@ -937,26 +997,6 @@ const docTemplate = `{
                 }
             }
         },
-        "black_list.BlackListRes": {
-            "type": "object",
-            "properties": {
-                "DateOfBirth": {
-                    "type": "string"
-                },
-                "FullName": {
-                    "type": "string"
-                },
-                "blacklisted_at": {
-                    "type": "string"
-                },
-                "position": {
-                    "type": "string"
-                },
-                "reason": {
-                    "type": "string"
-                }
-            }
-        },
         "black_list.ChangeRoleReq": {
             "type": "object",
             "properties": {
@@ -1002,20 +1042,6 @@ const docTemplate = `{
                 },
                 "user_id": {
                     "type": "string"
-                }
-            }
-        },
-        "black_list.GetAllBlackListRes": {
-            "type": "object",
-            "properties": {
-                "black_lists": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/black_list.BlackListRes"
-                    }
-                },
-                "count": {
-                    "type": "integer"
                 }
             }
         },
@@ -1081,13 +1107,50 @@ const docTemplate = `{
                 }
             }
         },
+        "black_list.Log": {
+            "type": "object",
+            "properties": {
+                "FullName": {
+                    "type": "string"
+                },
+                "action": {
+                    "type": "string"
+                },
+                "action_performed_by": {
+                    "type": "string"
+                },
+                "timestamp": {
+                    "type": "string"
+                }
+            }
+        },
+        "black_list.Logs": {
+            "type": "object",
+            "properties": {
+                "count": {
+                    "type": "integer"
+                },
+                "logs": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/black_list.Log"
+                    }
+                }
+            }
+        },
         "black_list.Report": {
             "type": "object",
             "properties": {
+                "FullName": {
+                    "type": "string"
+                },
                 "blacklisted_at": {
                     "type": "string"
                 },
-                "full_name": {
+                "position": {
+                    "type": "string"
+                },
+                "reason": {
                     "type": "string"
                 }
             }

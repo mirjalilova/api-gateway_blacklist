@@ -6,19 +6,6 @@ definitions:
       reason:
         type: string
     type: object
-  black_list.BlackListRes:
-    properties:
-      DateOfBirth:
-        type: string
-      FullName:
-        type: string
-      blacklisted_at:
-        type: string
-      position:
-        type: string
-      reason:
-        type: string
-    type: object
   black_list.ChangeRoleReq:
     properties:
       role:
@@ -49,15 +36,6 @@ definitions:
         type: string
       user_id:
         type: string
-    type: object
-  black_list.GetAllBlackListRes:
-    properties:
-      black_lists:
-        items:
-          $ref: '#/definitions/black_list.BlackListRes'
-        type: array
-      count:
-        type: integer
     type: object
   black_list.GetAllHRRes:
     properties:
@@ -99,11 +77,35 @@ definitions:
           $ref: '#/definitions/black_list.UserRes'
         type: array
     type: object
+  black_list.Log:
+    properties:
+      FullName:
+        type: string
+      action:
+        type: string
+      action_performed_by:
+        type: string
+      timestamp:
+        type: string
+    type: object
+  black_list.Logs:
+    properties:
+      count:
+        type: integer
+      logs:
+        items:
+          $ref: '#/definitions/black_list.Log'
+        type: array
+    type: object
   black_list.Report:
     properties:
+      FullName:
+        type: string
       blacklisted_at:
         type: string
-      full_name:
+      position:
+        type: string
+      reason:
         type: string
     type: object
   black_list.Reports:
@@ -365,7 +367,7 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/black_list.GetAllBlackListRes'
+            $ref: '#/definitions/black_list.Reports'
         "400":
           description: Bad Request
           schema:
@@ -421,6 +423,44 @@ paths:
       summary: Monitoring daily blacklist
       tags:
       - Monitoring
+  /blacklist/logs:
+    get:
+      consumes:
+      - application/json
+      description: View logs on blacklist
+      parameters:
+      - description: Limit
+        in: query
+        name: limit
+        type: integer
+      - description: Offset
+        in: query
+        name: offset
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/black_list.Logs'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      security:
+      - BearerAuth: []
+      summary: View logs on blacklist
+      tags:
+      - Logs
   /blacklist/monthly:
     get:
       consumes:

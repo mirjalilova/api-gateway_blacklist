@@ -2,12 +2,12 @@ package handler
 
 import (
 	"context"
-	"log/slog"
 	"strconv"
 
 	// rd "github.com/mirjalilova/api-gateway_blacklist/pkg/helper"
 	"github.com/gin-gonic/gin"
 	pb "github.com/mirjalilova/api-gateway_blacklist/internal/genproto/black_list"
+	"golang.org/x/exp/slog"
 )
 
 // @Summary 			Add employee to black list
@@ -57,7 +57,7 @@ func (h *HandlerStruct) AddEmployee(c *gin.Context) {
 // @Security            BearerAuth
 // @Param               limit query int false "Limit"
 // @Param               offset query int false "Offset"
-// @Success 200         {object} black_list.GetAllBlackListRes
+// @Success 200         {object} black_list.Reports
 // @Failure 400         {string} Error "Bad Request"
 // @Failure 404         {string} Error "Not Found"
 // @Failure 500         {string} Error "Internal Server Error"
@@ -371,5 +371,60 @@ func (h *HandlerStruct) GetMonthly(c *gin.Context) {
 	// rd.CacheData(c, h.Redis, cacheKey, res)
 
 	slog.Info("Monthly blacklist retrieved successfully")
+	c.JSON(200, resp)
+}
+
+// @Summary             View logs on blacklist
+// @Description         View logs on blacklist
+// @Tags                Logs
+// @Accept              json
+// @Produce             json
+// @Security            BearerAuth
+// @Param               limit query int false "Limit"
+// @Param               offset query int false "Offset"
+// @Success 200         {object} black_list.Logs
+// @Failure 400         {string} Error "Bad Request"
+// @Failure 404         {string} Error "Not Found"
+// @Failure 500         {string} Error "Internal Server Error"
+// @Router              /blacklist/logs [GET]
+func (h *HandlerStruct) ViewLogs(c *gin.Context) {
+	limit := c.Query("limit")
+    offset := c.Query("offset")
+
+    limitValue := 10
+    offsetValue := 1
+
+    if limit!= "" {
+        parsedLimit, err := strconv.Atoi(limit)
+        if err!= nil {
+            slog.Error("Invalid limit value")
+            c.JSON(400, gin.H{"error": "Invalid limit value"})
+            return
+        }
+        limitValue = parsedLimit
+    }
+
+    if offset!= "" {
+        parsedOffset, err := strconv.Atoi(offset)
+        if err!= nil {
+            slog.Error("Invalid offset value")
+            c.JSON(400, gin.H{"error": "Invalid offset value"})
+            return
+        }
+        offsetValue = parsedOffset
+    }
+
+    req := &pb.Filter{
+        Limit: int32(limitValue),
+		Offset: int32(offsetValue),
+	}
+
+	resp, err := h.Clients.BlacklistClient.ViewLogs(context.Background(), req)
+	if err!= nil {
+        slog.Error("Error while getting logs")
+        c.JSON(400, gin.H{"error": err})
+        return
+    }
+	slog.Info("Logs retrieved successfully")
 	c.JSON(200, resp)
 }
