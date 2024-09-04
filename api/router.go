@@ -76,6 +76,7 @@ func NewGin(h *handler.HandlerStruct) *gin.Engine {
 		bk.GET("/daily", h.GetDaily)
 		bk.GET("/weekly", h.GetWeekly)
 		bk.GET("/monthly", h.GetMonthly)
+		bk.GET("/logs", h.ViewLogs)
 
 	}
 
