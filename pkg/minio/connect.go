@@ -74,13 +74,11 @@ func MinIOConnect(cnf *config.Config) (*MinIO, error) {
 func (m *MinIO) Upload(fileName, filePath string) (string, error) {
 	contentType := "application/pdf"
 
-	info, err := m.client.FPutObject(context.Background(), bucketName, fileName, filePath, minio.PutObjectOptions{ContentType: contentType})
+	_, err := m.client.FPutObject(context.Background(), bucketName, fileName, filePath, minio.PutObjectOptions{ContentType: contentType})
 	if err != nil {
 		slog.Error("Error while uploading %s to bucket %s: %v\n", fileName, bucketName, err)
 		return "", err
 	}
-
-	slog.Info("Successfully uploaded %s of size %d\n", fileName, info.Size)
 
 	minioURL := fmt.Sprintf("http://localhost:9000/%s/%s", bucketName, fileName)
 

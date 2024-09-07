@@ -1,7 +1,6 @@
 package handler
 
 import (
-	"fmt"
 	"mime/multipart"
 	"net/http"
 	"os"
@@ -56,11 +55,9 @@ func (h *HandlerStruct) UploadFile(c *gin.Context) {
 		}
 	}
 
-
-	fmt.Println("::::;;::;", file.File.Filename)
 	// Fayl uchun yangi UUID nomini yaratish
 	id := uuid.New().String()
-	newFilename := id + ext
+	newFilename := file.File.Filename + id + ext
 	uploadPath := filepath.Join(uploadDir, newFilename)
 
 	// Faylni lokal papkaga saqlash
@@ -70,9 +67,22 @@ func (h *HandlerStruct) UploadFile(c *gin.Context) {
 		return
 	}
 
-	// Fayl yuklanganligi haqida javob qaytarish
+	slog.Info("File uploaded successfully", newFilename)
+
+	// Upload to MinIO and get the URL
+	objectName := file.File.Filename + id
+	url, err := h.Minio.Upload(objectName, uploadPath)
+	if err != nil {
+		slog.Error("Error uploading file to MinIO", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	slog.Info("File uploaded to MinIO successfully", objectName, url)
+
+	// Return the file URL
 	c.JSON(http.StatusCreated, gin.H{
 		"message": "File successfully uploaded",
-		"path":    uploadPath,
+		"path":    url,
 	})
 }
