@@ -8,6 +8,7 @@ import (
 	"github.com/mirjalilova/api-gateway_blacklist/api/handler"
 	_ "github.com/mirjalilova/api-gateway_blacklist/docs"
 	"github.com/mirjalilova/api-gateway_blacklist/internal/config"
+	"github.com/mirjalilova/api-gateway_blacklist/pkg/minio"
 	"golang.org/x/exp/slog"
 )
 
@@ -32,7 +33,13 @@ func Run(cfg *config.Config) {
 		return
 	}
 
-	h := handler.NewHandlerStruct(cfg, rd)
+	// Minio
+	minio, err := minio.MinIOConnect(cfg)
+	if err != nil {
+		slog.Error("Failed to connect to MinIO: %v", err)
+	}
+
+	h := handler.NewHandlerStruct(cfg, rd, minio)
 
 	router := api.NewGin(h)
 	if err := router.Run(cfg.API_GATEWAY); err != nil {

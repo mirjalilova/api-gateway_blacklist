@@ -7,10 +7,31 @@ services:
     build: .
     ports:
       - "3333:3333"
+    volumes:
+      - ./internal/media:/app/internal/media
     networks:
       - ntwrk
-# Docker Networks
+
+  # MinIO Service
+  minio:
+    image: minio/minio
+    container_name: minio
+    environment:
+      - MINIO_ROOT_USER=minioadmin
+      - MINIO_ROOT_PASSWORD=minioadmin123
+    ports:
+      - "9000:9000"    # MinIO API Port
+      - "9001:9001"    # MinIO Console Port
+    command: server /data --console-address ":9001"
+    volumes:
+      - minio_data:/data
+    networks:
+      - ntwrk
+
 networks:
   ntwrk:
-      name: ntwrk
-      external: true
+    name: ntwrk
+    external: true
+
+volumes:
+  minio_data:

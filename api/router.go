@@ -79,8 +79,9 @@ func NewGin(h *handler.HandlerStruct) *gin.Engine {
 		bk.GET("/weekly", h.GetWeekly)
 		bk.GET("/monthly", h.GetMonthly)
 		bk.GET("/logs", h.ViewLogs)
-
 	}
+
+	router.POST("/file-upload", h.UploadFile)
 
 	return router
 }
