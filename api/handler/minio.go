@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 
 	"github.com/gin-gonic/gin"
-	"github.com/google/uuid"
+	"github.com/mirjalilova/api-gateway_blacklist/pkg/helper"
 	"golang.org/x/exp/slog"
 )
 
@@ -28,7 +28,6 @@ type File struct {
 func (h *HandlerStruct) UploadFile(c *gin.Context) {
 	var file File
 
-	// Bind file from the request
 	err := c.ShouldBind(&file)
 	if err != nil {
 		slog.Error("Error binding request body", err)
@@ -36,7 +35,6 @@ func (h *HandlerStruct) UploadFile(c *gin.Context) {
 		return
 	}
 
-	// Fayl kengaytmasini olish
 	ext := filepath.Ext(file.File.Filename)
 	if ext != ".pdf" {
 		slog.Error("Invalid file format", file.File.Filename)
@@ -44,8 +42,7 @@ func (h *HandlerStruct) UploadFile(c *gin.Context) {
 		return
 	}
 
-	// Yuklash direktoriyasini yaratish (agar mavjud bo'lmasa)
-	uploadDir := "./internal/media"
+	uploadDir := "./internal/media/"
 	if _, err := os.Stat(uploadDir); os.IsNotExist(err) {
 		err := os.MkdirAll(uploadDir, os.ModePerm)
 		if err != nil {
@@ -55,34 +52,39 @@ func (h *HandlerStruct) UploadFile(c *gin.Context) {
 		}
 	}
 
-	// Fayl uchun yangi UUID nomini yaratish
-	id := uuid.New().String()
-	newFilename := file.File.Filename + id + ext
-	uploadPath := filepath.Join(uploadDir, newFilename)
+	uploadPath := filepath.Join(uploadDir, file.File.Filename)
 
-	// Faylni lokal papkaga saqlash
 	if err := c.SaveUploadedFile(file.File, uploadPath); err != nil {
 		slog.Error("Error saving file", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Error saving file"})
 		return
 	}
 
-	slog.Info("File uploaded successfully", newFilename)
-
-	// Upload to MinIO and get the URL
-	objectName := file.File.Filename + id
-	url, err := h.Minio.Upload(objectName, uploadPath)
+	_, err = h.Minio.Upload(file.File.Filename, uploadPath)
 	if err != nil {
 		slog.Error("Error uploading file to MinIO", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
-	slog.Info("File uploaded to MinIO successfully", objectName, url)
+	filePathTXT, err := helper.ConvertationToTXT(uploadPath)
+	if err != nil {
+		slog.Error("Error converting PDF to text", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to convert PDF to text"})
+		return
+	}
 
-	// Return the file URL
+	os.Remove(uploadPath)
+
+	name, err := helper.GetName(h.Genai, filePathTXT)
+	if err != nil {
+		slog.Error("Error extracting name from PDF", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to extract name from PDF"})
+		return
+	}
+
 	c.JSON(http.StatusCreated, gin.H{
-		"message": "File successfully uploaded",
-		"path":    url,
+		"message":   "File successfully uploaded",
+		"Full Name": name,
 	})
 }

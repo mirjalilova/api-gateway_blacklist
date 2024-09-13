@@ -11,7 +11,7 @@ import (
 )
 
 type MinIO struct {
-	client *minio.Client
+	Client *minio.Client
 	Cnf    *config.Config
 }
 
@@ -66,7 +66,7 @@ func MinIOConnect(cnf *config.Config) (*MinIO, error) {
 	}
 
 	return &MinIO{
-		client: minioClient,
+		Client: minioClient,
 		Cnf:    cnf,
 	}, nil
 }
@@ -74,7 +74,7 @@ func MinIOConnect(cnf *config.Config) (*MinIO, error) {
 func (m *MinIO) Upload(fileName, filePath string) (string, error) {
 	contentType := "application/pdf"
 
-	_, err := m.client.FPutObject(context.Background(), bucketName, fileName, filePath, minio.PutObjectOptions{ContentType: contentType})
+	_, err := m.Client.FPutObject(context.Background(), bucketName, fileName, filePath, minio.PutObjectOptions{ContentType: contentType})
 	if err != nil {
 		slog.Error("Error while uploading %s to bucket %s: %v\n", fileName, bucketName, err)
 		return "", err

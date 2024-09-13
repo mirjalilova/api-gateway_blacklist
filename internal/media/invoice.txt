@@ -1,0 +1,57 @@
+                                 Bahodirova Mubina
+         Tashkent, Uzbekistan | bahodirovamubina505@gmail.com | +998 97 022 4979 | gitlab | github |
+                                            t.me/Mbahodirovaa
+
+Profile
+ Enthusiastic Golang developer with a strong focus on building robust and -DEMO- microservices. Experienced in
+ technologies such as gRPC, Protocol Buffers, PostgreSQL, Docker, Kafka, and Redis. Proficient in creating API
+ gateways and distributed services, -DEMO- excellent technical skills and problem-solving abilities. Seeking to apply
+ my knowledge and passion in a backend development -DEMO- to contribute to innovative and impactful projects.
+
+Projects
+ Olympy Games | Go, gRPC, Kafka, WebSocket, Casbin, Swagger, MongoDB, Docker
+   • Developed and deployed a comprehensive system for tracking Olympic Games events with real-time updates.
+
+   • Built an admin panel to efficiently manage scores, statuses, matches, and rounds.
+
+   • Integrated WebSockets and Kafka to ensure real-time data streaming and high-performance interactions.
+
+
+ Project Control | Go, gRPC, Kafka, -DEMO-, Swagger, Docker                                                  github
+   • Each project is assigned a Swagger URL to manage and share API documentation, and seamless team integration,
+
+     centralized technical management.
+   • A platform for team members to store and manage their phone numbers and Telegram usernames for easy and
+
+     quick communication within teams.
+   • Effective management of individual and team projects, -DEMO- document storage and powerful improve
+
+     communication between team members.
+
+ Black List | Go, gRPC, Kafka, Casbin, Swagger, Docker
+    • Created a blacklist system for HR departments to monitor and manage employee behavior and performance.
+
+    • Enabled daily, weekly, and monthly monitoring with criteria for blacklisting and removal.
+
+
+
+Technical Skills
+ Languages: Go, SQL
+ Technologies: RESTful APIs, Microservices, Docker, Kafka, Redis, JWT, MongoDB, PostgreSQL, Swagger, Google
+ Cloud, CI/CD
+ Tools: Git, Linux
+ Soft Skills: Teamwork, Leadership, Communication, Problem Solving
+
+Education
+ Najot Ta’lim                                                                                  Tashkent, -DEMO-
+ Golang Bootcamp                                                                       March 2024 – September 2024
+ In-depth study of Golang, including Gin, Gorilla Mux, gRPC, Swagger UI, microservices architecture, RESTful APIs and
+ PostgreSQL.
+ Najot Ta’lim                                                                                Tashkent, Uzbekistan
+ Bootcamp Foundation                                                                   September 2023 – March 2024
+ Foundations of computer science, databases, algorithms, data structures, C programming and Python programming.
+
+Languages
+ Uzbek                                                                                                              Native
+ English                                                                                                 Pre-Intermediate
+ Russian                                                                                                               A2

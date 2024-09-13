@@ -10,6 +10,7 @@ import (
 	"github.com/mirjalilova/api-gateway_blacklist/internal/config"
 	"github.com/mirjalilova/api-gateway_blacklist/pkg/minio"
 	"golang.org/x/exp/slog"
+	"github.com/mirjalilova/api-gateway_blacklist/pkg/genai"
 )
 
 func Run(cfg *config.Config) {
@@ -29,20 +30,26 @@ func Run(cfg *config.Config) {
 		DB:       0,
 	})
 	if err := rd.Ping(context.Background()).Err(); err != nil {
-		slog.Error("Failed to connect to Redis: %v", err)
+		slog.Error("Failed to connect to Redis", err)
 		return
 	}
 
-	// Minio
-	minio, err := minio.MinIOConnect(cfg)
+	minioClient, err := minio.MinIOConnect(cfg)
 	if err != nil {
-		slog.Error("Failed to connect to MinIO: %v", err)
+		slog.Error("Failed to connect to MinIO", err)
+		return
 	}
 
-	h := handler.NewHandlerStruct(cfg, rd, minio)
+	advice, err := genai.ConnectGenai(cfg)
+	if err != nil {
+		slog.Error("Failed to connect to GenAI", err)
+		return
+	}
+
+	h := handler.NewHandlerStruct(cfg, rd, minioClient, advice)
 
 	router := api.NewGin(h)
 	if err := router.Run(cfg.API_GATEWAY); err != nil {
-		slog.Error("Failed to start API Gateway: %v", err)
+		slog.Error("Failed to start API Gateway", err)
 	}
 }
